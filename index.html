@@ -1,0 +1,1986 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Engineering Toolkit</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #101318;
+            color: #e5e7eb;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #171b22;
+            border-right: 1px solid #292f3a;
+            padding: 28px 18px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #6599f5;
+        }
+
+        .sidebar-description {
+            color: #929baa;
+            font-size: 12px;
+            margin-bottom: 38px;
+        }
+
+        .nav-title {
+            color: #727d8e;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 25px 0 12px 10px;
+        }
+
+        .nav-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 13px 12px;
+            margin-bottom: 7px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #aeb7c5;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #222936;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: #263a5b;
+            color: #80adff;
+        }
+
+        .nav-item:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .aviation-nav-parent {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .submenu-chevron {
+            font-size: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .aviation-nav-parent[aria-expanded="true"] .submenu-chevron {
+            transform: rotate(180deg);
+        }
+
+        .nav-submenu {
+            margin: -2px 0 10px 10px;
+            padding-left: 10px;
+            border-left: 1px solid #394456;
+        }
+
+        .nav-submenu[hidden] {
+            display: none;
+        }
+
+        .nav-subitem {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 11px;
+            margin: 3px 0;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #9eabba;
+            font-size: 12px;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-subitem:hover {
+            background: #222936;
+            color: #fff;
+        }
+
+        .nav-subitem.active {
+            background: #202f47;
+            color: #80adff;
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            flex: 1;
+            padding: 35px 45px;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #292f3a;
+            padding-bottom: 22px;
+            margin-bottom: 35px;
+        }
+
+        .topbar-title {
+            font-size: 14px;
+            color: #929baa;
+        }
+
+        .version {
+            color: #80adff;
+            font-size: 12px;
+            background: #1c2b43;
+            padding: 7px 12px;
+            border-radius: 20px;
+        }
+
+        .eyebrow {
+            color: #6599f5;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin: 0 0 10px;
+        }
+
+        .subtitle {
+            color: #929baa;
+            font-size: 14px;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        /* CALCULATOR CARD */
+
+        .calculator {
+            background: #191e27;
+            border: 1px solid #292f3a;
+            border-radius: 13px;
+            padding: 28px;
+            max-width: 750px;
+        }
+
+        .calculator h2 {
+            font-size: 19px;
+            margin: 0 0 9px;
+        }
+
+        .description {
+            color: #929baa;
+            font-size: 13px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #cbd2dc;
+            margin-bottom: 9px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            background: #10151d;
+            border: 1px solid #343d4b;
+            border-radius: 7px;
+            color: #e5e7eb;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6599f5;
+        }
+
+        .input-note {
+            font-size: 12px;
+            color: #929baa;
+            margin-top: 9px;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            background: #3978df;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 13px 22px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-button:hover {
+            background: #508cf0;
+        }
+
+        /* RESULTS */
+
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: #202a39;
+            border: 1px solid #30415a;
+            border-radius: 9px;
+        }
+
+        .result-label {
+            color: #80adff;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .result-detail {
+            color: #b5c0d0;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .error {
+            color: #ff7777;
+            font-size: 13px;
+            margin-top: 14px;
+        }
+
+        /* STATISTICS DASHBOARD */
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            background: #171e29;
+            border: 1px solid #303b4b;
+            border-radius: 9px;
+            padding: 16px;
+            min-width: 0;
+        }
+
+        .stat-label {
+            color: #929baa;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        /* CHART */
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-top: 25px;
+        }
+
+        /* PAGE NAVIGATION */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .footer {
+            color: #687384;
+            font-size: 12px;
+            margin-top: 45px;
+            padding-top: 20px;
+            border-top: 1px solid #292f3a;
+        }
+
+
+        .topbar-tools { display:flex; align-items:center; gap:10px; }
+        .language-label { color:#929baa; font-size:12px; }
+        .language-select { background:#171e29; color:#e5e7eb; border:1px solid #394456; border-radius:7px; padding:8px 10px; font-size:13px; }
+        body[dir="rtl"] .sidebar { border-right:0; border-left:1px solid #292f3a; }
+        body[dir="rtl"] .nav-item, body[dir="rtl"] .nav-subitem { text-align:right; }
+        body[dir="rtl"] .aviation-nav-parent { flex-direction:row-reverse; }
+        body[dir="rtl"] .topbar-tools { flex-direction:row-reverse; }
+        body[dir="rtl"] .field label { text-align:right; }
+        @media (max-width:750px) { .topbar-tools { flex-wrap:wrap; justify-content:flex-end; } }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 750px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                border-right: none;
+                border-bottom: 1px solid #292f3a;
+            }
+
+            .sidebar-description {
+                margin-bottom: 20px;
+            }
+
+            .main {
+                padding: 25px 18px;
+            }
+
+            .calculator {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .stat-value {
+                font-size: 21px;
+            }
+
+        }
+
+        @media (max-width: 380px) {
+
+            .statistics-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        /* AVIATION TOOLS */
+        .aviation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            max-width: 1100px;
+        }
+
+        .aviation-card {
+            max-width: none;
+            min-width: 0;
+        }
+
+        .aviation-card .result-value {
+            font-size: 25px;
+        }
+        .aviation-tools-heading {
+            max-width: 1100px;
+            margin: 30px 0 12px;
+        }
+        .aviation-tools-heading h2 {
+            margin: 4px 0 8px;
+            font-size: 22px;
+        }
+
+        .board-panel {
+            max-width: 1100px;
+            margin: 0 0 18px;
+            padding: 16px;
+            border: 1px solid #34445d;
+            border-radius: 10px;
+            background: #1a2230;
+        }
+        .board-panel h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+        .board-controls {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+            gap: 14px;
+            align-items: end;
+        }
+        .board-controls .field { margin: 0; }
+        .board-controls select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #394456;
+            border-radius: 7px;
+            background: #10151d;
+            color: #e5e7eb;
+            font-size: 14px;
+        }
+        .board-info {
+            color: #b9c5d6;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+        @media (max-width: 650px) {
+            .board-controls { grid-template-columns: 1fr; }
+        }
+        .aviation-note {
+            max-width: 1100px;
+            padding: 14px 16px;
+            margin: 0 0 20px;
+            border: 1px solid #5b4828;
+            border-radius: 9px;
+            background: #292316;
+            color: #e7d4a8;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .aviation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* FINAL POLISH */
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #80adff;
+            outline-offset: 2px;
+        }
+
+        .nav-item:disabled {
+            opacity: 0.35;
+        }
+
+        .result:focus {
+            outline: 2px solid #6599f5;
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                padding: 20px 18px;
+            }
+
+            .nav-item {
+                width: auto;
+                margin-right: 5px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Engineering <span>Toolkit</span>
+        </div>
+
+        <div class="sidebar-description">
+            Your engineering workspace
+        </div>
+
+        <div class="nav-title">Workspace</div>
+
+        <button class="nav-item active"
+                onclick="showPage('ohm', this)">
+            ⚡ Ohm's Law
+        </button>
+
+        <button class="nav-item"
+                onclick="showPage('electronics', this)">
+            ◉ Electronics
+        </button>
+
+        <button class="nav-item"
+                onclick="showPage('data', this)">
+            ▥ Data Analysis
+        </button>
+
+        <div class="nav-title">Engineering Tools</div>
+
+        <button class="nav-item aviation-nav-parent"
+                id="aviationNavButton"
+                aria-expanded="false"
+                aria-controls="aviationSubmenu"
+                onclick="toggleAviationMenu()">
+            <span>✈ Aviation Tools</span>
+            <span class="submenu-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div id="aviationSubmenu" class="nav-submenu" hidden>
+            <button class="nav-subitem"
+                    id="aviationEngineeringNav"
+                    onclick="showPage('aviation', this)">
+                Aviation Engineering
+            </button>
+            <button class="nav-subitem"
+                    id="flightSimulationNav"
+                    onclick="showPage('flightSim', this)">
+                Flight Simulation Tools
+            </button>
+        </div>
+
+        <button class="nav-item"
+                onclick="showPage('arduino', this)">
+            ⌘ Arduino Tools
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="topbar-title">
+                Engineering Toolkit / Dashboard
+            </div>
+
+            <div class="topbar-tools">
+                <label class="language-label" for="languageSelect">Language</label>
+                <select id="languageSelect" class="language-select" aria-label="Select language" onchange="setLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="ar">العربية</option>
+                    <option value="fr">Français</option>
+                    <option value="zh">中文</option>
+                    <option value="de">Deutsch</option>
+                </select>
+                <div class="version">Version 2.1</div>
+            </div>
+
+        </div>
+
+
+        <!-- OHM'S LAW PAGE -->
+
+        <section id="ohm" class="page active">
+
+            <div class="eyebrow">
+                Engineering / Electrical
+            </div>
+
+            <h1>Ohm's Law Calculator</h1>
+
+            <p class="subtitle">
+                Calculate voltage, current, resistance and power
+                using basic electrical formulas.
+            </p>
+
+            <div class="calculator">
+
+                <h2>Electrical Calculator</h2>
+
+                <p class="description">
+                    Select the values you want to calculate.
+                </p>
+
+                <div class="field">
+
+                    <label for="calculationMode">
+                        Calculation Mode
+                    </label>
+
+                    <select id="calculationMode"
+                            onchange="updateInputs()">
+
+                        <option value="voltage">
+                            Calculate Voltage (V)
+                        </option>
+
+                        <option value="current">
+                            Calculate Current (I)
+                        </option>
+
+                        <option value="resistance">
+                            Calculate Resistance (R)
+                        </option>
+
+                        <option value="power">
+                            Calculate Power (P)
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label id="label1" for="input1">
+                        Current (A)
+                    </label>
+
+                    <input id="input1"
+                           type="number"
+                           min="0"
+                           step="any"
+                           placeholder="Enter current">
+
+                </div>
+
+                <div class="field">
+
+                    <label id="label2" for="input2">
+                        Resistance (Ω)
+                    </label>
+
+                    <input id="input2"
+                           type="number"
+                           min="0"
+                           step="any"
+                           placeholder="Enter resistance">
+
+                </div>
+
+                <button class="action-button"
+                        onclick="calculate()">
+                    Calculate
+                </button>
+
+                <div id="ohmError" class="error" role="alert" aria-live="polite"></div>
+
+                <div id="ohmResult" class="result" aria-live="polite">
+
+                    <div class="result-label">
+                        CALCULATION RESULT
+                    </div>
+
+                    <div id="resultValue"
+                         class="result-value"></div>
+
+                    <div id="resultFormula"
+                         class="result-detail"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ELECTRONICS PAGE -->
+
+        <section id="electronics" class="page">
+
+            <div class="eyebrow">
+                Engineering / Electronics
+            </div>
+
+            <h1>Electronics</h1>
+
+            <p class="subtitle">
+                Useful calculators for basic electronic circuits
+                and components.
+            </p>
+
+            <div class="calculator">
+
+                <h2>Resistor Calculator</h2>
+
+                <p class="description">
+                    Calculate the equivalent resistance of
+                    resistors connected in series or parallel.
+                </p>
+
+                <div class="field">
+
+                    <label for="resistorMode">
+                        Circuit Configuration
+                    </label>
+
+                    <select id="resistorMode">
+
+                        <option value="series">
+                            Series Connection
+                        </option>
+
+                        <option value="parallel">
+                            Parallel Connection
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label for="resistorValues">
+                        Resistance Values (Ω)
+                    </label>
+
+                    <input
+                        id="resistorValues"
+                        type="text"
+                        placeholder="Example: 100, 220, 330"
+                    >
+
+                    <p class="input-note">
+                        Use a dot (.) for decimal values and
+                        a comma (,) to separate resistors.
+                        Example: 10.5, 14.25, 22.75
+                    </p>
+
+                </div>
+
+                <button class="action-button"
+                        onclick="calculateResistance()">
+                    Calculate Resistance
+                </button>
+
+                <div id="resistorError" class="error" role="alert" aria-live="polite"></div>
+
+                <div id="resistorResult" class="result" aria-live="polite">
+
+                    <div class="result-label">
+                        EQUIVALENT RESISTANCE
+                    </div>
+
+                    <div id="resistorValue"
+                         class="result-value"></div>
+
+                    <div id="resistorFormula"
+                         class="result-detail"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DATA ANALYSIS PAGE -->
+
+        <section id="data" class="page">
+
+            <div class="eyebrow">
+                Engineering / Data Analysis
+            </div>
+
+            <h1>Data Analysis</h1>
+
+            <p class="subtitle">
+                Analyze measurement data and visualize it
+                using graphs and statistical calculations.
+            </p>
+
+            <div class="calculator">
+
+                <h2>Measurement Analyzer</h2>
+
+                <p class="description">
+                    Enter measurement values to calculate
+                    statistics and generate a graph.
+                </p>
+
+                <div class="field">
+
+                    <label for="measurementValues">
+                        Measurement Values
+                    </label>
+
+                    <input
+                        id="measurementValues"
+                        type="text"
+                        value="24, 25, 27, 26, 29"
+                        placeholder="Example: 24, 25, 27, 26, 29"
+                    >
+
+                    <p class="input-note">
+                        Separate values using commas.
+                        Example: 24, 25, 27, 26, 29
+                    </p>
+
+                </div>
+
+
+                <!-- MEASUREMENT NAMES -->
+
+                <div class="field">
+
+                    <label>
+                        Measurement Names
+                    </label>
+
+                    <div id="measurementNames"></div>
+
+                    <p class="input-note">
+                        You can customize each measurement name.
+                        These names will appear on the graph.
+                    </p>
+
+                </div>
+
+
+                <button class="action-button"
+                        onclick="analyzeData()">
+                    Analyze Data
+                </button>
+
+                <div id="dataError" class="error" role="alert" aria-live="polite"></div>
+
+                <div id="dataResult" class="result" aria-live="polite">
+
+                    <div class="result-label">
+                        DATA ANALYSIS RESULTS
+                    </div>
+
+                    <!-- STATISTICS CARDS -->
+
+                    <div class="statistics-grid">
+
+                        <div class="stat-card">
+
+                            <div class="stat-label">
+                                Average
+                            </div>
+
+                            <div id="averageValue"
+                                 class="stat-value">
+                                -
+                            </div>
+
+                        </div>
+
+                        <div class="stat-card">
+
+                            <div class="stat-label">
+                                Minimum
+                            </div>
+
+                            <div id="minimumValue"
+                                 class="stat-value">
+                                -
+                            </div>
+
+                        </div>
+
+                        <div class="stat-card">
+
+                            <div class="stat-label">
+                                Maximum
+                            </div>
+
+                            <div id="maximumValue"
+                                 class="stat-value">
+                                -
+                            </div>
+
+                        </div>
+
+                        <div class="stat-card">
+
+                            <div class="stat-label">
+                                Standard Deviation
+                            </div>
+
+                            <div id="deviationValue"
+                                 class="stat-value">
+                                -
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MEASUREMENT GRAPH -->
+
+                    <div class="chart-container">
+
+                        <canvas id="measurementChart" role="img" aria-label="Line chart showing the entered measurement values"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- AVIATION TOOLS PAGE -->
+
+        <section id="aviation" class="page">
+            <div class="eyebrow">Engineering / Aerospace</div>
+            <h1>Aviation Tools</h1>
+            <p class="subtitle">
+                Explore basic aircraft performance and atmospheric calculations.
+                Enter values in the units shown beside each field.
+            </p>
+
+            <div class="aviation-note" role="note">
+                <strong>Educational use only:</strong> These simplified calculators are for learning and preliminary estimates.
+                They are not substitutes for an aircraft flight manual, approved performance data, flight planning software,
+                or instructions from a qualified flight instructor or aviation professional.
+            </div>
+
+            <div class="aviation-grid">
+                <div class="calculator aviation-card">
+                    <h2>Lift Calculator</h2>
+                    <p class="description">Calculate the aerodynamic lift generated by a wing using the lift equation.</p>
+                    <div class="field">
+                        <label for="liftDensity">Air Density (kg/m³)</label>
+                        <input id="liftDensity" type="number" min="0" step="any" value="1.225">
+                    </div>
+                    <div class="field">
+                        <label for="liftSpeed">True Airspeed (m/s)</label>
+                        <input id="liftSpeed" type="number" min="0" step="any" placeholder="e.g. 60">
+                    </div>
+                    <div class="field">
+                        <label for="liftArea">Wing Area (m²)</label>
+                        <input id="liftArea" type="number" min="0" step="any" placeholder="e.g. 16.2">
+                    </div>
+                    <div class="field">
+                        <label for="liftCoefficient">Lift Coefficient (CL)</label>
+                        <input id="liftCoefficient" type="number" min="0" step="any" placeholder="e.g. 0.8">
+                    </div>
+                    <button class="action-button" onclick="calculateLift()">Calculate Lift</button>
+                    <div id="liftError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="liftResult" class="result" aria-live="polite">
+                        <div class="result-label">LIFT FORCE</div>
+                        <div id="liftValue" class="result-value"></div>
+                        <div id="liftDetail" class="result-detail"></div>
+                    </div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Mach Number Calculator</h2>
+                    <p class="description">Compare true airspeed with the local speed of sound. Temperature is entered in °C.</p>
+                    <div class="field">
+                        <label for="machSpeed">True Airspeed (m/s)</label>
+                        <input id="machSpeed" type="number" min="0" step="any" placeholder="e.g. 250">
+                    </div>
+                    <div class="field">
+                        <label for="machTemperature">Air Temperature (°C)</label>
+                        <input id="machTemperature" type="number" step="any" value="15">
+                    </div>
+                    <button class="action-button" onclick="calculateMach()">Calculate Mach</button>
+                    <div id="machError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="machResult" class="result" aria-live="polite">
+                        <div class="result-label">MACH NUMBER</div>
+                        <div id="machValue" class="result-value"></div>
+                        <div id="machDetail" class="result-detail"></div>
+                    </div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Air Density Calculator</h2>
+                    <p class="description">Estimate air density using the ideal gas law for dry air.</p>
+                    <div class="field">
+                        <label for="airPressure">Atmospheric Pressure (hPa)</label>
+                        <input id="airPressure" type="number" min="0" step="any" value="1013.25">
+                    </div>
+                    <div class="field">
+                        <label for="airTemperature">Air Temperature (°C)</label>
+                        <input id="airTemperature" type="number" step="any" value="15">
+                    </div>
+                    <button class="action-button" onclick="calculateAirDensity()">Calculate Density</button>
+                    <div id="densityError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="densityResult" class="result" aria-live="polite">
+                        <div class="result-label">AIR DENSITY</div>
+                        <div id="densityValue" class="result-value"></div>
+                        <div id="densityDetail" class="result-detail"></div>
+                    </div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Flight Time & Fuel Estimate</h2>
+                    <p class="description">Estimate en-route time and fuel used from distance, groundspeed and fuel flow.</p>
+                    <div class="field">
+                        <label for="flightDistance">Route Distance (km)</label>
+                        <input id="flightDistance" type="number" min="0" step="any" placeholder="e.g. 450">
+                    </div>
+                    <div class="field">
+                        <label for="flightSpeed">Groundspeed (km/h)</label>
+                        <input id="flightSpeed" type="number" min="0" step="any" placeholder="e.g. 180">
+                    </div>
+                    <div class="field">
+                        <label for="fuelFlow">Fuel Flow (L/h)</label>
+                        <input id="fuelFlow" type="number" min="0" step="any" placeholder="e.g. 32">
+                    </div>
+                    <button class="action-button" onclick="calculateFlightEstimate()">Estimate Flight</button>
+                    <div id="flightError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="flightResult" class="result" aria-live="polite">
+                        <div class="result-label">ESTIMATED FLIGHT</div>
+                        <div id="flightValue" class="result-value"></div>
+                        <div id="flightDetail" class="result-detail"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- FLIGHT SIMULATION TOOLS PAGE -->
+        <section id="flightSim" class="page">
+            <div class="eyebrow">Aviation / MSFS 2020–2024</div>
+            <h1>Flight Simulation Tools</h1>
+            <p class="subtitle">Independent planning helpers for airliners and general aviation. Enter values from your simulator, aircraft, or flight plan.</p>
+            <div class="aviation-note" role="note">
+                <strong>Simulation-use note:</strong> These are simplified planning aids, not aircraft-specific procedures or certified performance tools. Always follow the simulated aircraft's FMS, checklist, operating manual and current simulator conditions. Wind, descent, fuel and IAS/TAS results are estimates.
+            </div>
+            <div class="aviation-grid">
+                <div class="calculator aviation-card">
+                    <h2>Quick Flight Planner</h2>
+                    <p class="description">Estimate en-route time from route distance and average groundspeed. Use nautical miles and knots, as in most flight simulators.</p>
+                    <div class="field"><label for="simRouteDistance">Route Distance (NM)</label><input id="simRouteDistance" type="number" min="0" step="any" placeholder="e.g. 420"></div>
+                    <div class="field"><label for="simGroundspeed">Average Groundspeed (kt)</label><input id="simGroundspeed" type="number" min="0" step="any" placeholder="e.g. 240"></div>
+                    <button class="action-button" onclick="calculateSimFlightPlan()">Calculate Flight Time</button>
+                    <div id="simPlanError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="simPlanResult" class="result" aria-live="polite"><div class="result-label">ESTIMATED EN-ROUTE TIME</div><div id="simPlanValue" class="result-value"></div><div id="simPlanDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Wind Components</h2>
+                    <p class="description">Calculate headwind or tailwind and crosswind relative to the runway. Directions are wind-from direction and runway heading in degrees.</p>
+                    <div class="field"><label for="windRunway">Runway Heading (°)</label><input id="windRunway" type="number" min="0" max="360" step="any" placeholder="e.g. 270"></div>
+                    <div class="field"><label for="windDirection">Wind Direction (° FROM)</label><input id="windDirection" type="number" min="0" max="360" step="any" placeholder="e.g. 300"></div>
+                    <div class="field"><label for="windSpeed">Wind Speed (kt)</label><input id="windSpeed" type="number" min="0" step="any" placeholder="e.g. 18"></div>
+                    <button class="action-button" onclick="calculateWindComponents()">Calculate Wind</button>
+                    <div id="windError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="windResult" class="result" aria-live="polite"><div class="result-label">RUNWAY WIND COMPONENTS</div><div id="windValue" class="result-value"></div><div id="windDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>QNH & Altimeter</h2>
+                    <p class="description">Convert QNH between hPa and inHg and estimate pressure altitude from field elevation and QNH.</p>
+                    <div class="field"><label for="qnhValue">QNH (hPa)</label><input id="qnhValue" type="number" min="800" max="1100" step="any" value="1013.25"></div>
+                    <div class="field"><label for="qnhFieldElevation">Field Elevation (ft)</label><input id="qnhFieldElevation" type="number" step="any" value="0"></div>
+                    <button class="action-button" onclick="calculateQnh()">Convert & Estimate</button>
+                    <div id="qnhError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="qnhResult" class="result" aria-live="polite"><div class="result-label">ALTIMETER SETTING</div><div id="qnhValueOut" class="result-value"></div><div id="qnhDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Top of Descent (TOD)</h2>
+                    <p class="description">Estimate descent distance using a selected descent angle, plus a target vertical speed. Uses groundspeed in knots and altitude in feet.</p>
+                    <div class="field"><label for="todCurrentAltitude">Current Altitude (ft)</label><input id="todCurrentAltitude" type="number" min="0" step="any" placeholder="e.g. 35000"></div>
+                    <div class="field"><label for="todTargetAltitude">Target Altitude (ft)</label><input id="todTargetAltitude" type="number" min="0" step="any" value="3000"></div>
+                    <div class="field"><label for="todGroundspeed">Groundspeed (kt)</label><input id="todGroundspeed" type="number" min="0" step="any" placeholder="e.g. 280"></div>
+                    <div class="field"><label for="todAngle">Descent Angle (°)</label><input id="todAngle" type="number" min="0.5" max="10" step="any" value="3"></div>
+                    <button class="action-button" onclick="calculateTod()">Calculate TOD</button>
+                    <div id="todError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="todResult" class="result" aria-live="polite"><div class="result-label">TOP OF DESCENT ESTIMATE</div><div id="todValue" class="result-value"></div><div id="todDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Fuel Planner</h2>
+                    <p class="description">Build a simple fuel estimate for piston aircraft or airliners. Use one consistent unit throughout (for example kg with kg/h, or L with L/h).</p>
+                    <div class="field"><label for="fuelPlanTime">Planned En-route Time (hours)</label><input id="fuelPlanTime" type="number" min="0" step="any" placeholder="e.g. 2.5"></div>
+                    <div class="field"><label for="fuelPlanFlow">Cruise Fuel Flow (units/hour)</label><input id="fuelPlanFlow" type="number" min="0" step="any" placeholder="e.g. 2400"></div>
+                    <div class="field"><label for="fuelPlanTaxi">Taxi / APU Fuel (units)</label><input id="fuelPlanTaxi" type="number" min="0" step="any" value="0"></div>
+                    <div class="field"><label for="fuelPlanContingency">Contingency (%)</label><input id="fuelPlanContingency" type="number" min="0" max="100" step="any" value="5"></div>
+                    <div class="field"><label for="fuelPlanReserve">Final Reserve (minutes)</label><input id="fuelPlanReserve" type="number" min="0" step="any" value="30"></div>
+                    <div class="field"><label for="fuelPlanAlternate">Alternate Fuel (units)</label><input id="fuelPlanAlternate" type="number" min="0" step="any" value="0"></div>
+                    <button class="action-button" onclick="calculateFuelPlan()">Calculate Fuel</button>
+                    <div id="fuelPlanError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="fuelPlanResult" class="result" aria-live="polite"><div class="result-label">ESTIMATED BLOCK FUEL</div><div id="fuelPlanValue" class="result-value"></div><div id="fuelPlanDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>IAS / TAS Converter</h2>
+                    <p class="description">Estimate true airspeed from indicated airspeed, pressure altitude and outside air temperature. Simplified low-speed approximation; compressibility and instrument errors are ignored.</p>
+                    <div class="field"><label for="iasValue">Indicated Airspeed (kt)</label><input id="iasValue" type="number" min="0" step="any" placeholder="e.g. 120"></div>
+                    <div class="field"><label for="iasAltitude">Pressure Altitude (ft)</label><input id="iasAltitude" type="number" min="-1500" max="36000" step="any" placeholder="e.g. 8000"></div>
+                    <div class="field"><label for="iasTemperature">Outside Air Temperature (°C)</label><input id="iasTemperature" type="number" step="any" placeholder="e.g. 5"></div>
+                    <button class="action-button" onclick="calculateIasTas()">Estimate TAS</button>
+                    <div id="iasError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="iasResult" class="result" aria-live="polite"><div class="result-label">ESTIMATED TRUE AIRSPEED</div><div id="iasOutput" class="result-value"></div><div id="iasDetail" class="result-detail"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARDUINO TOOLS PAGE -->
+        <section id="arduino" class="page">
+            <div class="eyebrow">Engineering / Embedded Systems</div>
+            <h1>Arduino Tools</h1>
+            <p class="subtitle">Useful calculators for common Arduino and basic electronics projects.</p>
+            <div class="board-panel">
+                <h2>Board Configuration</h2>
+                <div class="board-controls">
+                    <div class="field">
+                        <label for="arduinoBoard">Select your board</label>
+                        <select id="arduinoBoard" onchange="updateArduinoBoard()">
+                            <option value="uno">Arduino Uno R3</option>
+                            <option value="nano">Arduino Nano (classic ATmega328P)</option>
+                            <option value="mega">Arduino Mega 2560</option>
+                            <option value="leonardo">Arduino Leonardo</option>
+                            <option value="esp32">ESP32 DevKit (classic ESP32)</option>
+                            <option value="custom">Custom / other board</option>
+                        </select>
+                    </div>
+                    <div id="arduinoBoardInfo" class="board-info" aria-live="polite">
+                        Uno R3 preset: 5 V logic, 10-bit ADC (0–1023), 8-bit PWM preset (0–255). These are calculator defaults; actual pins and references may vary.
+                    </div>
+                </div>
+            </div>
+            <div class="aviation-note" role="note">
+                <strong>Before wiring:</strong> Board selection fills typical calculator defaults; it does not detect connected hardware.
+                Check your exact board revision, pin limits, ADC configuration and component datasheets. Never apply 5 V to ESP32 GPIO pins.
+            </div>
+            <div class="aviation-grid">
+                <div class="calculator aviation-card">
+                    <h2>LED Series Resistor</h2>
+                    <p class="description">Find a suitable current-limiting resistor for an LED connected to an Arduino output.</p>
+                    <div class="field"><label for="ledSupply">Supply / Output Voltage (V)</label><input id="ledSupply" type="number" min="0" step="any" value="5"></div>
+                    <div class="field"><label for="ledForward">LED Forward Voltage (V)</label><input id="ledForward" type="number" min="0" step="any" value="2"></div>
+                    <div class="field"><label for="ledCurrent">Desired LED Current (mA)</label><input id="ledCurrent" type="number" min="0" step="any" value="10"></div>
+                    <button class="action-button" onclick="calculateLedResistor()">Calculate Resistor</button>
+                    <div id="ledError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="ledResult" class="result" aria-live="polite"><div class="result-label">SERIES RESISTOR</div><div id="ledValue" class="result-value"></div><div id="ledDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Voltage Divider</h2>
+                    <p class="description">Calculate the output voltage across the lower resistor (R2).</p>
+                    <div class="field"><label for="dividerSupply">Input Voltage (V)</label><input id="dividerSupply" type="number" min="0" step="any" value="5"></div>
+                    <div class="field"><label for="dividerR1">R1 (kΩ)</label><input id="dividerR1" type="number" min="0" step="any" placeholder="e.g. 10"></div>
+                    <div class="field"><label for="dividerR2">R2 (kΩ)</label><input id="dividerR2" type="number" min="0" step="any" placeholder="e.g. 10"></div>
+                    <button class="action-button" onclick="calculateDivider()">Calculate Output</button>
+                    <div id="dividerError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="dividerResult" class="result" aria-live="polite"><div class="result-label">OUTPUT VOLTAGE</div><div id="dividerValue" class="result-value"></div><div id="dividerDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>Analog-to-Digital Converter (ADC)</h2>
+                    <p class="description">Convert an analog input voltage into its approximate digital reading.</p>
+                    <div class="field"><label for="adcVoltage">Input Voltage (V)</label><input id="adcVoltage" type="number" min="0" step="any" placeholder="e.g. 2.5"></div>
+                    <div class="field"><label for="adcReference">ADC Reference Voltage (V)</label><input id="adcReference" type="number" min="0" step="any" value="5"></div>
+                    <div class="field"><label for="adcBits">ADC Resolution (bits)</label><input id="adcBits" type="number" min="1" max="24" step="1" value="10"></div>
+                    <button class="action-button" onclick="calculateAdc()">Convert ADC Value</button>
+                    <div id="adcError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="adcResult" class="result" aria-live="polite"><div class="result-label">DIGITAL READING</div><div id="adcValue" class="result-value"></div><div id="adcDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>PWM Calculator</h2>
+                    <p class="description">Calculate the PWM compare value and average output voltage for a selected duty cycle.</p>
+                    <div class="field"><label for="pwmDuty">Duty Cycle (%)</label><input id="pwmDuty" type="number" min="0" max="100" step="any" value="50"></div>
+                    <div class="field"><label for="pwmVoltage">Logic Voltage (V)</label><input id="pwmVoltage" type="number" min="0" step="any" value="5"></div>
+                    <div class="field"><label for="pwmBits">PWM Resolution (bits)</label><input id="pwmBits" type="number" min="1" max="24" step="1" value="8"></div>
+                    <button class="action-button" onclick="calculatePwm()">Calculate PWM</button>
+                    <div id="pwmError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="pwmResult" class="result" aria-live="polite"><div class="result-label">PWM OUTPUT</div><div id="pwmValue" class="result-value"></div><div id="pwmDetail" class="result-detail"></div></div>
+                </div>
+
+                <div class="calculator aviation-card">
+                    <h2>RC Time Constant</h2>
+                    <p class="description">Calculate the time constant of a resistor-capacitor circuit and an approximate 5τ settling time.</p>
+                    <div class="field"><label for="rcResistance">Resistance (kΩ)</label><input id="rcResistance" type="number" min="0" step="any" placeholder="e.g. 10"></div>
+                    <div class="field"><label for="rcCapacitance">Capacitance (µF)</label><input id="rcCapacitance" type="number" min="0" step="any" placeholder="e.g. 100"></div>
+                    <button class="action-button" onclick="calculateRc()">Calculate Time Constant</button>
+                    <div id="rcError" class="error" role="alert" aria-live="polite"></div>
+                    <div id="rcResult" class="result" aria-live="polite"><div class="result-label">RC TIME CONSTANT</div><div id="rcValue" class="result-value"></div><div id="rcDetail" class="result-detail"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            Engineering Toolkit · Built for learning and engineering projects
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+    // PAGE NAVIGATION
+    function showPage(pageId, button) {
+        const targetPage = document.getElementById(pageId);
+        if (!targetPage || !button) return;
+
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.toggle("active", page === targetPage);
+        });
+
+        document.querySelectorAll(".nav-item, .nav-subitem").forEach(item => {
+            item.classList.remove("active");
+        });
+        button.classList.add("active");
+
+        const aviationParent = document.getElementById("aviationNavButton");
+        if (pageId === "aviation" || pageId === "flightSim") {
+            aviationParent.classList.add("active");
+            document.getElementById("aviationSubmenu").hidden = false;
+            aviationParent.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    function toggleAviationMenu() {
+        const submenu = document.getElementById("aviationSubmenu");
+        const parent = document.getElementById("aviationNavButton");
+        const willOpen = submenu.hidden;
+        submenu.hidden = !willOpen;
+        parent.setAttribute("aria-expanded", String(willOpen));
+
+        // Opening the group for the first time selects Aviation Engineering by default.
+        if (willOpen && !document.querySelector(".nav-subitem.active")) {
+            showPage("aviation", document.getElementById("aviationEngineeringNav"));
+        }
+    }
+
+    // SHARED HELPERS
+    function formatNumber(value, decimals = 2) {
+        return Number(value).toLocaleString(undefined, {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        });
+    }
+
+    function parseCommaSeparatedNumbers(rawInput) {
+        const parts = rawInput.split(",").map(value => value.trim());
+        if (rawInput.trim() === "" || parts.some(part => part === "")) {
+            return null;
+        }
+
+        const values = parts.map(Number);
+        return values.every(Number.isFinite) ? values : null;
+    }
+
+    // Allow keyboard users to run calculations with Enter.
+    ["input1", "input2"].forEach(id => {
+        document.getElementById(id).addEventListener("keydown", event => {
+            if (event.key === "Enter") calculate();
+        });
+    });
+    document.getElementById("resistorValues").addEventListener("keydown", event => {
+        if (event.key === "Enter") calculateResistance();
+    });
+    document.getElementById("measurementValues").addEventListener("keydown", event => {
+        if (event.key === "Enter") analyzeData();
+    });
+
+    // OHM'S LAW CALCULATOR
+    function updateInputs() {
+        const mode = document.getElementById("calculationMode").value;
+        const label1 = document.getElementById("label1");
+        const label2 = document.getElementById("label2");
+        const input1 = document.getElementById("input1");
+        const input2 = document.getElementById("input2");
+
+        const configurations = {
+            voltage: ["Current (A)", "Resistance (Ω)", "Enter current", "Enter resistance"],
+            current: ["Voltage (V)", "Resistance (Ω)", "Enter voltage", "Enter resistance"],
+            resistance: ["Voltage (V)", "Current (A)", "Enter voltage", "Enter current"],
+            power: ["Voltage (V)", "Current (A)", "Enter voltage", "Enter current"]
+        };
+
+        const config = configurations[mode];
+        if (!config) return;
+
+        label1.textContent = config[0];
+        label2.textContent = config[1];
+        input1.placeholder = config[2];
+        input2.placeholder = config[3];
+        document.getElementById("ohmResult").style.display = "none";
+        document.getElementById("ohmError").textContent = "";
+    }
+
+    function calculate() {
+        const mode = document.getElementById("calculationMode").value;
+        const firstRaw = document.getElementById("input1").value.trim();
+        const secondRaw = document.getElementById("input2").value.trim();
+        const firstValue = Number(firstRaw);
+        const secondValue = Number(secondRaw);
+        const error = document.getElementById("ohmError");
+        const result = document.getElementById("ohmResult");
+
+        error.textContent = "";
+        result.style.display = "none";
+
+        if (firstRaw === "" || secondRaw === "" ||
+            !Number.isFinite(firstValue) || !Number.isFinite(secondValue)) {
+            error.textContent = "Please enter valid numbers in both fields.";
+            return;
+        }
+
+        if (firstValue < 0 || secondValue < 0) {
+            error.textContent = "Electrical values cannot be negative.";
+            return;
+        }
+
+        let answer;
+        let unit;
+        let formula;
+
+        switch (mode) {
+            case "voltage":
+                answer = firstValue * secondValue;
+                unit = "V";
+                formula = "Voltage = Current × Resistance";
+                break;
+            case "current":
+                if (secondValue === 0) {
+                    error.textContent = "Resistance must be greater than zero.";
+                    return;
+                }
+                answer = firstValue / secondValue;
+                unit = "A";
+                formula = "Current = Voltage / Resistance";
+                break;
+            case "resistance":
+                if (secondValue === 0) {
+                    error.textContent = "Current must be greater than zero.";
+                    return;
+                }
+                answer = firstValue / secondValue;
+                unit = "Ω";
+                formula = "Resistance = Voltage / Current";
+                break;
+            case "power":
+                answer = firstValue * secondValue;
+                unit = "W";
+                formula = "Power = Voltage × Current";
+                break;
+            default:
+                error.textContent = "Please select a valid calculation mode.";
+                return;
+        }
+
+        if (!Number.isFinite(answer)) {
+            error.textContent = "The result is outside the supported numeric range.";
+            return;
+        }
+
+        document.getElementById("resultValue").textContent = `${formatNumber(answer)} ${unit}`;
+        document.getElementById("resultFormula").textContent = formula;
+        result.style.display = "block";
+    }
+
+    // RESISTOR CALCULATOR
+    function calculateResistance() {
+        const rawInput = document.getElementById("resistorValues").value;
+        const mode = document.getElementById("resistorMode").value;
+        const error = document.getElementById("resistorError");
+        const result = document.getElementById("resistorResult");
+
+        error.textContent = "";
+        result.style.display = "none";
+
+        const values = parseCommaSeparatedNumbers(rawInput);
+        if (!values || values.length < 2 || values.some(value => value <= 0)) {
+            error.textContent = "Enter at least two positive resistance values, separated by commas.";
+            return;
+        }
+
+        let totalResistance;
+        let formula;
+
+        if (mode === "series") {
+            totalResistance = values.reduce((total, value) => total + value, 0);
+            formula = "Series: R = R1 + R2 + R3 + ...";
+        } else if (mode === "parallel") {
+            totalResistance = 1 / values.reduce((total, value) => total + (1 / value), 0);
+            formula = "Parallel: 1/R = 1/R1 + 1/R2 + 1/R3 + ...";
+        } else {
+            error.textContent = "Please select a valid circuit configuration.";
+            return;
+        }
+
+        if (!Number.isFinite(totalResistance) || totalResistance <= 0) {
+            error.textContent = "The result is outside the supported numeric range.";
+            return;
+        }
+
+        document.getElementById("resistorValue").textContent = `${formatNumber(totalResistance)} Ω`;
+        document.getElementById("resistorFormula").textContent = formula;
+        result.style.display = "block";
+    }
+
+    // DATA ANALYSIS
+    let measurementChart = null;
+
+    function updateMeasurementNames() {
+        const rawInput = document.getElementById("measurementValues").value;
+        const container = document.getElementById("measurementNames");
+        const existingNames = Array.from(
+            container.querySelectorAll(".measurement-name-input")
+        ).map(input => input.value);
+        const count = rawInput.trim() === "" ? 0 : rawInput.split(",").length;
+
+        container.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+            const field = document.createElement("div");
+            field.className = "field";
+            field.style.marginBottom = "12px";
+
+            const label = document.createElement("label");
+            label.textContent = `Measurement ${i + 1}`;
+            label.htmlFor = `measurementName${i}`;
+
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.id = `measurementName${i}`;
+            nameInput.placeholder = "Enter measurement name";
+            nameInput.value = existingNames[i] || `Measurement ${i + 1}`;
+            nameInput.className = "measurement-name-input";
+
+            field.appendChild(label);
+            field.appendChild(nameInput);
+            container.appendChild(field);
+        }
+    }
+
+    document.getElementById("measurementValues").addEventListener("input", updateMeasurementNames);
+    updateMeasurementNames();
+
+    function analyzeData() {
+        const rawInput = document.getElementById("measurementValues").value;
+        const error = document.getElementById("dataError");
+        const result = document.getElementById("dataResult");
+
+        error.textContent = "";
+        result.style.display = "none";
+
+        const values = parseCommaSeparatedNumbers(rawInput);
+        if (!values || values.length < 2) {
+            error.textContent = "Enter at least two valid numbers, separated by commas. Empty values are not allowed.";
+            return;
+        }
+
+        const nameInputs = document.querySelectorAll(".measurement-name-input");
+        const labels = Array.from(nameInputs).map((input, index) => {
+            const customName = input.value.trim();
+            return customName || `Measurement ${index + 1}`;
+        });
+
+        const average = values.reduce((total, value) => total + value, 0) / values.length;
+        const minimum = Math.min(...values);
+        const maximum = Math.max(...values);
+        const variance = values.reduce(
+            (total, value) => total + Math.pow(value - average, 2), 0
+        ) / values.length;
+        const standardDeviation = Math.sqrt(variance);
+
+        document.getElementById("averageValue").textContent = formatNumber(average);
+        document.getElementById("minimumValue").textContent = formatNumber(minimum);
+        document.getElementById("maximumValue").textContent = formatNumber(maximum);
+        document.getElementById("deviationValue").textContent = formatNumber(standardDeviation);
+
+        if (measurementChart) {
+            measurementChart.destroy();
+            measurementChart = null;
+        }
+
+        result.style.display = "block";
+
+        if (typeof Chart === "undefined") {
+            error.textContent = "Statistics were calculated, but the graph library could not load. Check your internet connection and refresh the page to display the chart.";
+            return;
+        }
+
+        const canvas = document.getElementById("measurementChart");
+        try {
+            measurementChart = new Chart(canvas, {
+                type: "line",
+                data: {
+                    labels,
+                    datasets: [{
+                        label: "Measurements",
+                        data: values,
+                        borderColor: "#6599f5",
+                        backgroundColor: "rgba(101, 153, 245, 0.15)",
+                        borderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: "#80adff",
+                        pointHoverBackgroundColor: "#ffffff",
+                        pointBorderColor: "#6599f5",
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: "nearest", intersect: false },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: { color: "#929baa" },
+                            grid: { color: "#303846" }
+                        },
+                        x: {
+                            ticks: { color: "#929baa" },
+                            grid: { color: "#303846" }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: "#e5e7eb" } },
+                        tooltip: {
+                            enabled: true,
+                            mode: "nearest",
+                            intersect: false,
+                            backgroundColor: "#202a39",
+                            titleColor: "#80adff",
+                            bodyColor: "#ffffff",
+                            borderColor: "#6599f5",
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                title: items => items.length ? items[0].label : "",
+                                label: context => `Value: ${context.parsed.y}`
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (chartError) {
+            error.textContent = "The statistics were calculated, but the graph could not be created. Please refresh the page and try again.";
+            console.error("Chart creation error:", chartError);
+        }
+    }
+
+    // AVIATION TOOLS
+    function readNumber(id) {
+        const raw = document.getElementById(id).value.trim();
+        if (raw === "") return null;
+        const value = Number(raw);
+        return Number.isFinite(value) ? value : null;
+    }
+
+    function showAviationError(errorId, resultId, message) {
+        document.getElementById(errorId).textContent = message;
+        document.getElementById(resultId).style.display = "none";
+    }
+
+    function showAviationResult(errorId, resultId) {
+        document.getElementById(errorId).textContent = "";
+        document.getElementById(resultId).style.display = "block";
+    }
+
+    function calculateLift() {
+        const density = readNumber("liftDensity");
+        const speed = readNumber("liftSpeed");
+        const area = readNumber("liftArea");
+        const coefficient = readNumber("liftCoefficient");
+        const errorId = "liftError", resultId = "liftResult";
+
+        if ([density, speed, area, coefficient].some(value => value === null) ||
+            density <= 0 || speed <= 0 || area <= 0 || coefficient < 0) {
+            showAviationError(errorId, resultId,
+                "Enter valid values. Density, speed and wing area must be greater than zero; CL cannot be negative.");
+            return;
+        }
+
+        const lift = 0.5 * density * speed ** 2 * area * coefficient;
+        if (!Number.isFinite(lift)) {
+            showAviationError(errorId, resultId, "The result is outside the supported numeric range.");
+            return;
+        }
+        document.getElementById("liftValue").textContent = `${formatNumber(lift, 2)} N`;
+        document.getElementById("liftDetail").textContent =
+            "L = ½ × ρ × V² × S × CL. This is an idealized lift estimate.";
+        showAviationResult(errorId, resultId);
+    }
+
+    function calculateMach() {
+        const speed = readNumber("machSpeed");
+        const temperatureC = readNumber("machTemperature");
+        const errorId = "machError", resultId = "machResult";
+
+        if (speed === null || temperatureC === null || speed <= 0 || temperatureC <= -273.15) {
+            showAviationError(errorId, resultId,
+                "Enter a positive true airspeed and a temperature above absolute zero (-273.15 °C).");
+            return;
+        }
+
+        const temperatureK = temperatureC + 273.15;
+        const speedOfSound = Math.sqrt(1.4 * 287.05 * temperatureK);
+        const mach = speed / speedOfSound;
+        if (!Number.isFinite(mach) || !Number.isFinite(speedOfSound)) {
+            showAviationError(errorId, resultId, "The result is outside the supported numeric range.");
+            return;
+        }
+        document.getElementById("machValue").textContent = `Mach ${formatNumber(mach, 3)}`;
+        document.getElementById("machDetail").textContent =
+            `Estimated speed of sound: ${formatNumber(speedOfSound, 2)} m/s at ${formatNumber(temperatureC, 1)} °C. Assumes dry air with γ = 1.4.`;
+        showAviationResult(errorId, resultId);
+    }
+
+    function calculateAirDensity() {
+        const pressureHpa = readNumber("airPressure");
+        const temperatureC = readNumber("airTemperature");
+        const errorId = "densityError", resultId = "densityResult";
+
+        if (pressureHpa === null || temperatureC === null ||
+            pressureHpa <= 0 || temperatureC <= -273.15) {
+            showAviationError(errorId, resultId,
+                "Enter a pressure greater than zero and a temperature above absolute zero (-273.15 °C).");
+            return;
+        }
+
+        const temperatureK = temperatureC + 273.15;
+        const pressurePa = pressureHpa * 100;
+        const density = pressurePa / (287.05 * temperatureK);
+        if (!Number.isFinite(density)) {
+            showAviationError(errorId, resultId, "The result is outside the supported numeric range.");
+            return;
+        }
+        document.getElementById("densityValue").textContent = `${formatNumber(density, 4)} kg/m³`;
+        document.getElementById("densityDetail").textContent =
+            `Using ${formatNumber(pressureHpa, 2)} hPa (${formatNumber(pressurePa, 0)} Pa). ρ = p / (R × T), with dry-air R = 287.05 J/(kg·K).`;
+        showAviationResult(errorId, resultId);
+    }
+
+    // FLIGHT SIMULATION TOOLS (MSFS 2020 / 2024)
+    function calculateSimFlightPlan() {
+        const distance = readNumber("simRouteDistance"), speed = readNumber("simGroundspeed");
+        if (distance === null || speed === null || distance <= 0 || speed <= 0) {
+            showAviationError("simPlanError", "simPlanResult", "Enter a route distance and groundspeed greater than zero."); return;
+        }
+        const hours = distance / speed, mins = Math.round(hours * 60);
+        document.getElementById("simPlanValue").textContent = `${Math.floor(mins / 60)} h ${mins % 60} min`;
+        document.getElementById("simPlanDetail").textContent = `Estimated en-route time for ${formatNumber(distance, 1)} NM at ${formatNumber(speed, 1)} kt average groundspeed. Does not include taxi, climb, approach or holding.`;
+        showAviationResult("simPlanError", "simPlanResult");
+    }
+
+    function calculateWindComponents() {
+        const runway = readNumber("windRunway"), direction = readNumber("windDirection"), speed = readNumber("windSpeed");
+        if ([runway, direction, speed].some(v => v === null) || runway < 0 || runway > 360 || direction < 0 || direction > 360 || speed < 0) {
+            showAviationError("windError", "windResult", "Enter directions from 0° to 360° and a non-negative wind speed."); return;
+        }
+        const angle = (direction - runway) * Math.PI / 180;
+        const head = speed * Math.cos(angle), cross = speed * Math.sin(angle);
+        const headLabel = head >= 0 ? "Headwind" : "Tailwind";
+        const crossLabel = cross >= 0 ? "Crosswind from the right" : "Crosswind from the left";
+        document.getElementById("windValue").textContent = `${formatNumber(Math.abs(head), 1)} kt ${headLabel.toLowerCase()}`;
+        document.getElementById("windDetail").textContent = `${headLabel}: ${formatNumber(Math.abs(head), 1)} kt. ${crossLabel}: ${formatNumber(Math.abs(cross), 1)} kt. Components are relative to the entered runway heading.`;
+        showAviationResult("windError", "windResult");
+    }
+
+    function calculateQnh() {
+        const qnh = readNumber("qnhValue"), elevation = readNumber("qnhFieldElevation");
+        if (qnh === null || elevation === null || qnh < 800 || qnh > 1100) {
+            showAviationError("qnhError", "qnhResult", "Enter QNH between 800 and 1100 hPa and a valid field elevation."); return;
+        }
+        const inHg = qnh * 0.0295299830714;
+        const pressureAltitude = elevation + (1013.25 - qnh) * 27;
+        document.getElementById("qnhValueOut").textContent = `${formatNumber(qnh, 2)} hPa`;
+        document.getElementById("qnhDetail").textContent = `Altimeter equivalent: ${formatNumber(inHg, 2)} inHg. Approximate pressure altitude: ${formatNumber(pressureAltitude, 0)} ft. Uses 27 ft per hPa as a rule of thumb; not an altimeter calibration or terrain-clearance tool.`;
+        showAviationResult("qnhError", "qnhResult");
+    }
+
+    function calculateTod() {
+        const current = readNumber("todCurrentAltitude"), target = readNumber("todTargetAltitude"), gs = readNumber("todGroundspeed"), angleDeg = readNumber("todAngle");
+        if ([current, target, gs, angleDeg].some(v => v === null) || current <= target || target < 0 || gs <= 0 || angleDeg < 0.5 || angleDeg > 10) {
+            showAviationError("todError", "todResult", "Current altitude must exceed target altitude; groundspeed must be positive and angle between 0.5° and 10°."); return;
+        }
+        const loss = current - target;
+        const angle = angleDeg * Math.PI / 180;
+        const distanceNm = (loss / Math.tan(angle)) / 6076.12;
+        const verticalSpeed = gs * 101.2686 * Math.tan(angle);
+        document.getElementById("todValue").textContent = `${formatNumber(distanceNm, 1)} NM before target`;
+        document.getElementById("todDetail").textContent = `Altitude to lose: ${formatNumber(loss, 0)} ft. Approximate descent rate: ${formatNumber(verticalSpeed, 0)} ft/min at ${formatNumber(gs, 0)} kt and ${formatNumber(angleDeg, 1)}°. Add operational margins and follow aircraft-specific guidance.`;
+        showAviationResult("todError", "todResult");
+    }
+
+    function calculateFuelPlan() {
+        const time = readNumber("fuelPlanTime"), flow = readNumber("fuelPlanFlow"), taxi = readNumber("fuelPlanTaxi"), contingency = readNumber("fuelPlanContingency"), reserve = readNumber("fuelPlanReserve"), alternate = readNumber("fuelPlanAlternate");
+        if ([time, flow, taxi, contingency, reserve, alternate].some(v => v === null) || time < 0 || flow < 0 || taxi < 0 || contingency < 0 || contingency > 100 || reserve < 0 || alternate < 0 || time === 0 || flow === 0) {
+            showAviationError("fuelPlanError", "fuelPlanResult", "Enter positive en-route time and fuel flow; other values must be non-negative and contingency must be 0–100%."); return;
+        }
+        const trip = time * flow, contingencyFuel = trip * contingency / 100, reserveFuel = reserve / 60 * flow;
+        const total = trip + contingencyFuel + reserveFuel + taxi + alternate;
+        document.getElementById("fuelPlanValue").textContent = `${formatNumber(total, 1)} fuel units`;
+        document.getElementById("fuelPlanDetail").textContent = `Trip: ${formatNumber(trip, 1)} · Contingency: ${formatNumber(contingencyFuel, 1)} · Final reserve: ${formatNumber(reserveFuel, 1)} · Taxi/APU: ${formatNumber(taxi, 1)} · Alternate: ${formatNumber(alternate, 1)}. Keep all entries in the same unit (all kg or all L, for example). This is a customizable estimate, not regulatory fuel planning.`;
+        showAviationResult("fuelPlanError", "fuelPlanResult");
+    }
+
+    function calculateIasTas() {
+        const ias = readNumber("iasValue"), altitudeFt = readNumber("iasAltitude"), oat = readNumber("iasTemperature");
+        if ([ias, altitudeFt, oat].some(v => v === null) || ias <= 0 || altitudeFt < -1500 || altitudeFt > 36000 || oat <= -273.15) {
+            showAviationError("iasError", "iasResult", "Enter positive IAS, pressure altitude from -1500 to 36000 ft, and temperature above absolute zero."); return;
+        }
+        const altitudeM = altitudeFt * 0.3048;
+        const base = 1 - 2.25577e-5 * altitudeM;
+        if (base <= 0) { showAviationError("iasError", "iasResult", "Altitude is outside the supported atmosphere model."); return; }
+        const pressureRatio = Math.pow(base, 5.25588);
+        const densityRatio = pressureRatio * 288.15 / (oat + 273.15);
+        if (densityRatio <= 0 || !Number.isFinite(densityRatio)) { showAviationError("iasError", "iasResult", "Could not calculate a valid air-density ratio for these conditions."); return; }
+        const tas = ias / Math.sqrt(densityRatio);
+        document.getElementById("iasOutput").textContent = `${formatNumber(tas, 1)} kt TAS`;
+        document.getElementById("iasDetail").textContent = `Approximate density ratio σ = ${formatNumber(densityRatio, 3)}. Uses pressure altitude and OAT with a standard-atmosphere pressure model; assumes IAS ≈ EAS and neglects compressibility and instrument/position error. Best treated as a learning estimate.`;
+        showAviationResult("iasError", "iasResult");
+    }
+
+    // ARDUINO BOARD PRESETS
+    const arduinoBoardProfiles = {
+        uno: {
+            label: "Arduino Uno R3",
+            logic: 5,
+            adcReference: 5,
+            adcBits: 10,
+            pwmBits: 8,
+            info: "ATmega328P · 5 V logic · 10-bit ADC (0–1023) · 8-bit PWM preset (0–255). The ADC reference can be configured; PWM-capable pins are limited to specific pins."
+        },
+        nano: {
+            label: "Arduino Nano (classic ATmega328P)",
+            logic: 5,
+            adcReference: 5,
+            adcBits: 10,
+            pwmBits: 8,
+            info: "Classic ATmega328P Nano · 5 V logic · 10-bit ADC (0–1023) · 8-bit PWM preset. This profile is not for Nano Every or newer Nano families."
+        },
+        mega: {
+            label: "Arduino Mega 2560",
+            logic: 5,
+            adcReference: 5,
+            adcBits: 10,
+            pwmBits: 8,
+            info: "ATmega2560 · 5 V logic · 10-bit ADC (0–1023) · 8-bit PWM preset. PWM is available only on marked pins."
+        },
+        leonardo: {
+            label: "Arduino Leonardo",
+            logic: 5,
+            adcReference: 5,
+            adcBits: 10,
+            pwmBits: 8,
+            info: "ATmega32U4 · 5 V logic · 10-bit ADC (0–1023) · 8-bit PWM preset. Check the board pinout before wiring."
+        },
+        esp32: {
+            label: "ESP32 DevKit (classic ESP32)",
+            logic: 3.3,
+            adcReference: 3.3,
+            adcBits: 12,
+            pwmBits: 8,
+            info: "Classic ESP32 preset · 3.3 V GPIO · up to 12-bit ADC setting · 8-bit analogWrite-style PWM default preset. ADC usable voltage depends on attenuation and chip/board; 3.3 V is only a nominal calculator reference. Never connect 5 V directly to GPIO."
+        }
+    };
+
+    function updateArduinoBoard() {
+        const boardId = document.getElementById("arduinoBoard").value;
+        const profile = arduinoBoardProfiles[boardId];
+        const info = document.getElementById("arduinoBoardInfo");
+        if (!profile) {
+            info.textContent = "Custom mode: enter the logic voltage, ADC reference, ADC resolution and PWM resolution specified by your exact board and software configuration.";
+            return;
+        }
+        document.getElementById("ledSupply").value = profile.logic;
+        document.getElementById("pwmVoltage").value = profile.logic;
+        document.getElementById("adcReference").value = profile.adcReference;
+        document.getElementById("adcBits").value = profile.adcBits;
+        document.getElementById("pwmBits").value = profile.pwmBits;
+        info.textContent = profile.info;
+    }
+
+    // ARDUINO TOOLS
+    function showArduinoError(prefix, message) {
+        document.getElementById(prefix + "Error").textContent = message;
+        document.getElementById(prefix + "Result").style.display = "none";
+    }
+    function showArduinoResult(prefix, value, detail) {
+        document.getElementById(prefix + "Error").textContent = "";
+        document.getElementById(prefix + "Value").textContent = value;
+        document.getElementById(prefix + "Detail").textContent = detail;
+        document.getElementById(prefix + "Result").style.display = "block";
+    }
+    function calculateLedResistor() {
+        const supply = readNumber("ledSupply"), forward = readNumber("ledForward"), current = readNumber("ledCurrent");
+        if ([supply, forward, current].some(v => v === null) || supply <= 0 || forward < 0 || current <= 0 || supply <= forward) {
+            showArduinoError("led", "Enter valid values. Supply voltage must be greater than LED forward voltage, and current must be positive."); return;
+        }
+        const resistance = (supply - forward) / (current / 1000);
+        if (!Number.isFinite(resistance)) { showArduinoError("led", "The result is outside the supported numeric range."); return; }
+        const standard = [100, 120, 150, 180, 220, 270, 330, 390, 470, 560, 680, 820, 1000, 1200, 1500, 1800, 2200, 2700, 3300, 3900, 4700, 5600, 6800, 8200, 10000];
+        const next = standard.find(v => v >= resistance) || Math.ceil(resistance / 1000) * 1000;
+        showArduinoResult("led", `${formatNumber(resistance, 1)} Ω`, `Choose a standard resistor of at least ${formatNumber(next, 0)} Ω. Calculated current assumes the stated LED forward voltage.`);
+    }
+    function calculateDivider() {
+        const voltage = readNumber("dividerSupply"), r1 = readNumber("dividerR1"), r2 = readNumber("dividerR2");
+        if ([voltage, r1, r2].some(v => v === null) || voltage < 0 || r1 <= 0 || r2 <= 0) { showArduinoError("divider", "Enter a non-negative input voltage and positive resistor values."); return; }
+        const output = voltage * r2 / (r1 + r2);
+        showArduinoResult("divider", `${formatNumber(output, 4)} V`, `Vout = Vin × R2 / (R1 + R2). Divider current: ${formatNumber(voltage / (r1 + r2), 3)} mA (resistors entered in kΩ).`);
+    }
+    function calculateAdc() {
+        const voltage = readNumber("adcVoltage"), reference = readNumber("adcReference"), bits = readNumber("adcBits");
+        if ([voltage, reference, bits].some(v => v === null) || reference <= 0 || voltage < 0 || voltage > reference || !Number.isInteger(bits) || bits < 1 || bits > 24) { showArduinoError("adc", "Input voltage must be between 0 and Vref. Enter a positive reference and an integer resolution from 1 to 24 bits."); return; }
+        const max = 2 ** bits - 1, reading = Math.round(voltage / reference * max);
+        showArduinoResult("adc", `${reading} / ${max}`, `ADC ≈ round(Vin / Vref × (2ⁿ − 1)). Resolution: ${bits} bits; ideal quantization step: ${formatNumber(reference / max * 1000, 3)} mV.`);
+    }
+    function calculatePwm() {
+        const duty = readNumber("pwmDuty"), voltage = readNumber("pwmVoltage"), bits = readNumber("pwmBits");
+        if ([duty, voltage, bits].some(v => v === null) || duty < 0 || duty > 100 || voltage < 0 || !Number.isInteger(bits) || bits < 1 || bits > 24) { showArduinoError("pwm", "Enter a duty cycle from 0–100%, non-negative logic voltage, and integer resolution from 1 to 24 bits."); return; }
+        const max = 2 ** bits - 1, value = Math.round(duty / 100 * max), average = voltage * duty / 100;
+        showArduinoResult("pwm", `${value} / ${max}`, `Ideal average voltage: ${formatNumber(average, 3)} V. Actual PWM frequency and API value depend on the selected Arduino board and pin.`);
+    }
+    function calculateRc() {
+        const resistance = readNumber("rcResistance"), capacitance = readNumber("rcCapacitance");
+        if ([resistance, capacitance].some(v => v === null) || resistance <= 0 || capacitance <= 0) { showArduinoError("rc", "Enter positive resistance and capacitance values."); return; }
+        const tau = resistance * capacitance;
+        if (!Number.isFinite(tau)) { showArduinoError("rc", "The result is outside the supported numeric range."); return; }
+        showArduinoResult("rc", `${formatNumber(tau, 3)} ms`, `τ = R × C. Approximate 5τ settling time: ${formatNumber(5 * tau, 3)} ms (about 99.3% of the final value for a simple first-order RC circuit).`);
+    }
+
+    function calculateFlightEstimate() {
+        const distance = readNumber("flightDistance");
+        const groundspeed = readNumber("flightSpeed");
+        const fuelFlow = readNumber("fuelFlow");
+        const errorId = "flightError", resultId = "flightResult";
+
+        if ([distance, groundspeed, fuelFlow].some(value => value === null) ||
+            distance < 0 || groundspeed <= 0 || fuelFlow < 0) {
+            showAviationError(errorId, resultId,
+                "Enter valid values. Distance and fuel flow cannot be negative; groundspeed must be greater than zero.");
+            return;
+        }
+
+        const timeHours = distance / groundspeed;
+        const fuelLitres = timeHours * fuelFlow;
+        if (!Number.isFinite(timeHours) || !Number.isFinite(fuelLitres)) {
+            showAviationError(errorId, resultId, "The result is outside the supported numeric range.");
+            return;
+        }
+        const totalMinutes = Math.round(timeHours * 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        document.getElementById("flightValue").textContent = `${hours} h ${minutes} min`;
+        document.getElementById("flightDetail").textContent =
+            `Estimated fuel used: ${formatNumber(fuelLitres, 2)} L. Formula: time = distance / groundspeed; fuel = time × fuel flow. Excludes taxi, climb, reserves, alternate and contingency fuel.`;
+        showAviationResult(errorId, resultId);
+    }
+
+    // Apply the selected board's typical starting values on first load.
+    updateArduinoBoard();
+
+
+
+    // Multilingual interface (English, Turkish, Arabic, French, Chinese, German).
+    const I18N = {"Your engineering workspace": ["Mühendislik çalışma alanınız", "مساحة عملك الهندسية", "Votre espace de travail d’ingénierie", "您的工程工作区", "Ihr Engineering-Arbeitsbereich"], "Workspace": ["Çalışma Alanı", "مساحة العمل", "Espace de travail", "工作区", "Arbeitsbereich"], "Engineering Tools": ["Mühendislik Araçları", "أدوات الهندسة", "Outils d’ingénierie", "工程工具", "Engineering-Tools"], "Ohm's Law": ["Ohm Kanunu", "قانون أوم", "Loi d’Ohm", "欧姆定律", "Ohmsches Gesetz"], "Electronics": ["Elektronik", "الإلكترونيات", "Électronique", "电子学", "Elektronik"], "Data Analysis": ["Veri Analizi", "تحليل البيانات", "Analyse des données", "数据分析", "Datenanalyse"], "Aviation Tools": ["Havacılık Araçları", "أدوات الطيران", "Outils aéronautiques", "航空工具", "Luftfahrt-Tools"], "Aviation Engineering": ["Havacılık Mühendisliği", "هندسة الطيران", "Ingénierie aéronautique", "航空工程", "Luftfahrttechnik"], "Flight Simulation Tools": ["Uçuş Simülasyonu Araçları", "أدوات محاكاة الطيران", "Outils de simulation de vol", "飞行模拟工具", "Flugsimulations-Tools"], "Arduino Tools": ["Arduino Araçları", "أدوات أردوينو", "Outils Arduino", "Arduino 工具", "Arduino-Tools"], "Engineering Toolkit / Dashboard": ["Engineering Toolkit / Kontrol Paneli", "مجموعة الأدوات الهندسية / لوحة التحكم", "Engineering Toolkit / Tableau de bord", "Engineering Toolkit / 仪表板", "Engineering Toolkit / Dashboard"], "Ohm's Law Calculator": ["Ohm Kanunu Hesaplayıcısı", "حاسبة قانون أوم", "Calculateur de loi d’Ohm", "欧姆定律计算器", "Ohmsches Gesetz – Rechner"], "Calculate voltage, current, resistance and power using basic electrical formulas.": ["Temel elektrik formülleriyle gerilim, akım, direnç ve gücü hesaplayın.", "احسب الجهد والتيار والمقاومة والقدرة باستخدام المعادلات الكهربائية الأساسية.", "Calculez la tension, le courant, la résistance et la puissance avec les formules électriques de base.", "使用基本电学公式计算电压、电流、电阻和功率。", "Berechnen Sie Spannung, Strom, Widerstand und Leistung mit grundlegenden elektrischen Formeln."], "Electrical Calculator": ["Elektrik Hesaplayıcısı", "حاسبة كهربائية", "Calculateur électrique", "电学计算器", "Elektrik-Rechner"], "Select the values you want to calculate.": ["Hesaplamak istediğiniz büyüklüğü seçin.", "اختر القيم التي تريد حسابها.", "Sélectionnez les valeurs à calculer.", "选择要计算的数值。", "Wählen Sie die Werte aus, die Sie berechnen möchten."], "Calculation Mode": ["Hesaplama Modu", "وضع الحساب", "Mode de calcul", "计算模式", "Berechnungsmodus"], "Calculate Voltage (V)": ["Gerilimi Hesapla (V)", "احسب الجهد (V)", "Calculer la tension (V)", "计算电压 (V)", "Spannung berechnen (V)"], "Calculate Current (I)": ["Akımı Hesapla (I)", "احسب التيار (I)", "Calculer le courant (I)", "计算电流 (I)", "Strom berechnen (I)"], "Calculate Resistance (R)": ["Direnci Hesapla (R)", "احسب المقاومة (R)", "Calculer la résistance (R)", "计算电阻 (R)", "Widerstand berechnen (R)"], "Calculate Power (P)": ["Gücü Hesapla (P)", "احسب القدرة (P)", "Calculer la puissance (P)", "计算功率 (P)", "Leistung berechnen (P)"], "Current (A)": ["Akım (A)", "التيار (A)", "Courant (A)", "电流 (A)", "Strom (A)"], "Resistance (Ω)": ["Direnç (Ω)", "المقاومة (Ω)", "Résistance (Ω)", "电阻 (Ω)", "Widerstand (Ω)"], "Calculate": ["Hesapla", "احسب", "Calculer", "计算", "Berechnen"], "CALCULATION RESULT": ["HESAPLAMA SONUCU", "نتيجة الحساب", "RÉSULTAT DU CALCUL", "计算结果", "BERECHNUNGSERGEBNIS"], "Useful calculators for basic electronic circuits and components.": ["Temel elektronik devreleri ve bileşenleri için kullanışlı hesaplayıcılar.", "حاسبات مفيدة للدوائر والمكونات الإلكترونية الأساسية.", "Des calculateurs utiles pour les circuits et composants électroniques de base.", "用于基本电子电路和元件的实用计算器。", "Nützliche Rechner für grundlegende elektronische Schaltungen und Bauteile."], "Resistor Calculator": ["Direnç Hesaplayıcısı", "حاسبة المقاومات", "Calculateur de résistances", "电阻计算器", "Widerstandsrechner"], "Calculate the equivalent resistance of resistors connected in series or parallel.": ["Seri veya paralel bağlı dirençlerin eşdeğer direncini hesaplayın.", "احسب المقاومة المكافئة للمقاومات المتصلة على التوالي أو التوازي.", "Calculez la résistance équivalente de résistances montées en série ou en parallèle.", "计算串联或并联电阻的等效电阻。", "Berechnen Sie den Ersatzwiderstand von Reihen- oder Parallelschaltungen."], "Circuit Configuration": ["Devre Bağlantısı", "توصيل الدائرة", "Configuration du circuit", "电路连接方式", "Schaltungskonfiguration"], "Series Connection": ["Seri Bağlantı", "توصيل على التوالي", "Connexion en série", "串联", "Reihenschaltung"], "Parallel Connection": ["Paralel Bağlantı", "توصيل على التوازي", "Connexion en parallèle", "并联", "Parallelschaltung"], "Resistance Values (Ω)": ["Direnç Değerleri (Ω)", "قيم المقاومة (Ω)", "Valeurs des résistances (Ω)", "电阻值 (Ω)", "Widerstandswerte (Ω)"], "Calculate Resistance": ["Direnci Hesapla", "احسب المقاومة", "Calculer la résistance", "计算电阻", "Widerstand berechnen"], "EQUIVALENT RESISTANCE": ["EŞDEĞER DİRENÇ", "المقاومة المكافئة", "RÉSISTANCE ÉQUIVALENTE", "等效电阻", "ERSATZWIDERSTAND"], "Analyze measurement data and visualize it using graphs and statistical calculations.": ["Ölçüm verilerini istatistiksel hesaplamalar ve grafiklerle analiz edin.", "حلّل بيانات القياس واعرضها باستخدام الرسوم البيانية والحسابات الإحصائية.", "Analysez les mesures et visualisez-les à l’aide de graphiques et de calculs statistiques.", "使用图表和统计计算分析并可视化测量数据。", "Analysieren und visualisieren Sie Messdaten mit Diagrammen und statistischen Berechnungen."], "Measurement Analyzer": ["Ölçüm Analiz Aracı", "محلل القياسات", "Analyseur de mesures", "测量分析器", "Messwertanalyse"], "Measurement Values": ["Ölçüm Değerleri", "قيم القياس", "Valeurs mesurées", "测量值", "Messwerte"], "Measurement Names": ["Ölçüm Adları", "أسماء القياسات", "Noms des mesures", "测量名称", "Messnamen"], "Analyze Data": ["Verileri Analiz Et", "حلّل البيانات", "Analyser les données", "分析数据", "Daten analysieren"], "DATA ANALYSIS RESULTS": ["VERİ ANALİZİ SONUÇLARI", "نتائج تحليل البيانات", "RÉSULTATS DE L’ANALYSE", "数据分析结果", "ERGEBNISSE DER DATENANALYSE"], "Average": ["Ortalama", "المتوسط", "Moyenne", "平均值", "Mittelwert"], "Minimum": ["Minimum", "الحد الأدنى", "Minimum", "最小值", "Minimum"], "Maximum": ["Maksimum", "الحد الأقصى", "Maximum", "最大值", "Maximum"], "Standard Deviation": ["Standart Sapma", "الانحراف المعياري", "Écart-type", "标准差", "Standardabweichung"], "Engineering / Aerospace": ["Mühendislik / Havacılık ve Uzay", "الهندسة / الطيران والفضاء", "Ingénierie / Aérospatiale", "工程 / 航空航天", "Engineering / Luft- und Raumfahrt"], "Explore basic aircraft performance and atmospheric calculations. Enter values in the units shown beside each field.": ["Temel uçak performansı ve atmosfer hesaplamalarını keşfedin. Değerleri alanların yanındaki birimlerle girin.", "استكشف حسابات أداء الطائرات والغلاف الجوي الأساسية. أدخل القيم بالوحدات الموضحة بجانب كل حقل.", "Explorez les calculs de base des performances aéronautiques et de l’atmosphère. Saisissez les valeurs dans les unités indiquées.", "探索基本飞机性能和大气计算。请使用各输入框旁标明的单位。", "Entdecken Sie grundlegende Flugzeugleistungs- und Atmosphärenberechnungen. Geben Sie Werte in den angegebenen Einheiten ein."], "Educational use only:": ["Yalnızca eğitim amaçlıdır:", "للاستخدام التعليمي فقط:", "Usage pédagogique uniquement :", "仅供教学使用：", "Nur zu Ausbildungszwecken:"], "Lift Calculator": ["Kaldırma Kuvveti Hesaplayıcısı", "حاسبة قوة الرفع", "Calculateur de portance", "升力计算器", "Auftriebsrechner"], "Calculate Lift": ["Kaldırma Kuvvetini Hesapla", "احسب قوة الرفع", "Calculer la portance", "计算升力", "Auftrieb berechnen"], "LIFT FORCE": ["KALDIRMA KUVVETİ", "قوة الرفع", "FORCE DE PORTANCE", "升力", "AUFTRIEBSKRAFT"], "Mach Number Calculator": ["Mach Sayısı Hesaplayıcısı", "حاسبة رقم ماخ", "Calculateur du nombre de Mach", "马赫数计算器", "Machzahl-Rechner"], "Calculate Mach": ["Mach Sayısını Hesapla", "احسب رقم ماخ", "Calculer le nombre de Mach", "计算马赫数", "Machzahl berechnen"], "MACH NUMBER": ["MACH SAYISI", "رقم ماخ", "NOMBRE DE MACH", "马赫数", "MACHZAHL"], "Air Density Calculator": ["Hava Yoğunluğu Hesaplayıcısı", "حاسبة كثافة الهواء", "Calculateur de densité de l’air", "空气密度计算器", "Luftdichte-Rechner"], "Atmospheric Pressure (hPa)": ["Atmosfer Basıncı (hPa)", "الضغط الجوي (hPa)", "Pression atmosphérique (hPa)", "大气压力 (hPa)", "Luftdruck (hPa)"], "Calculate Density": ["Yoğunluğu Hesapla", "احسب الكثافة", "Calculer la densité", "计算密度", "Dichte berechnen"], "AIR DENSITY": ["HAVA YOĞUNLUĞU", "كثافة الهواء", "DENSITÉ DE L’AIR", "空气密度", "LUFTDICHTE"], "Flight Time & Fuel Estimate": ["Uçuş Süresi ve Yakıt Tahmini", "تقدير زمن الرحلة والوقود", "Estimation du temps de vol et du carburant", "飞行时间与燃油估算", "Flugzeit- und Kraftstoffschätzung"], "Estimate Flight": ["Uçuşu Tahmin Et", "قدّر الرحلة", "Estimer le vol", "估算飞行", "Flug schätzen"], "ESTIMATED FLIGHT": ["TAHMİNİ UÇUŞ", "الرحلة المقدّرة", "VOL ESTIMÉ", "预计飞行", "FLUGSCHÄTZUNG"], "Quick Flight Planner": ["Hızlı Uçuş Planlayıcı", "مخطط رحلة سريع", "Planificateur de vol rapide", "快速飞行计划", "Schnell-Flugplaner"], "Wind Components": ["Rüzgâr Bileşenleri", "مركبات الرياح", "Composantes du vent", "风分量", "Windkomponenten"], "QNH & Altimeter": ["QNH ve Altimetre", "QNH ومقياس الارتفاع", "QNH et altimètre", "QNH 与高度表", "QNH und Höhenmesser"], "Top of Descent (TOD)": ["Alçalmaya Başlama Noktası (TOD)", "نقطة بدء الهبوط (TOD)", "Début de descente (TOD)", "下降顶点 (TOD)", "Sinkflugbeginn (TOD)"], "Fuel Planner": ["Yakıt Planlayıcı", "مخطط الوقود", "Planificateur carburant", "燃油规划器", "Kraftstoffplaner"], "IAS / TAS Converter": ["IAS / TAS Dönüştürücü", "محول IAS / TAS", "Convertisseur IAS / TAS", "IAS / TAS 转换器", "IAS-/TAS-Umrechner"], "Calculate Flight Time": ["Uçuş Süresini Hesapla", "احسب زمن الرحلة", "Calculer le temps de vol", "计算飞行时间", "Flugzeit berechnen"], "Calculate Wind": ["Rüzgârı Hesapla", "احسب الرياح", "Calculer le vent", "计算风分量", "Wind berechnen"], "Convert & Estimate": ["Dönüştür ve Tahmin Et", "حوّل وقدّر", "Convertir et estimer", "转换并估算", "Umrechnen und schätzen"], "Calculate TOD": ["TOD Hesapla", "احسب TOD", "Calculer le TOD", "计算 TOD", "TOD berechnen"], "Calculate Fuel": ["Yakıtı Hesapla", "احسب الوقود", "Calculer le carburant", "计算燃油", "Kraftstoff berechnen"], "Estimate TAS": ["TAS Tahmin Et", "قدّر TAS", "Estimer la TAS", "估算 TAS", "TAS schätzen"], "Engineering / Embedded Systems": ["Mühendislik / Gömülü Sistemler", "الهندسة / الأنظمة المضمنة", "Ingénierie / Systèmes embarqués", "工程 / 嵌入式系统", "Engineering / Eingebettete Systeme"], "Useful calculators for common Arduino and basic electronics projects.": ["Arduino ve temel elektronik projeleri için kullanışlı hesaplayıcılar.", "حاسبات مفيدة لمشاريع أردوينو والإلكترونيات الأساسية.", "Calculateurs utiles pour les projets Arduino et l’électronique de base.", "适用于 Arduino 和基础电子项目的实用计算器。", "Nützliche Rechner für Arduino- und grundlegende Elektronikprojekte."], "Board Configuration": ["Kart Yapılandırması", "إعداد اللوحة", "Configuration de la carte", "开发板配置", "Board-Konfiguration"], "Select your board": ["Kartınızı seçin", "اختر لوحتك", "Sélectionnez votre carte", "选择开发板", "Wählen Sie Ihr Board"], "LED Series Resistor": ["LED Seri Direnci", "مقاومة LED المتسلسلة", "Résistance série de LED", "LED 串联电阻", "LED-Vorwiderstand"], "Voltage Divider": ["Gerilim Bölücü", "مقسم الجهد", "Diviseur de tension", "分压器", "Spannungsteiler"], "Analog-to-Digital Converter (ADC)": ["Analog-Dijital Dönüştürücü (ADC)", "محول تناظري إلى رقمي (ADC)", "Convertisseur analogique-numérique (ADC)", "模数转换器 (ADC)", "Analog-Digital-Wandler (ADC)"], "PWM Calculator": ["PWM Hesaplayıcısı", "حاسبة PWM", "Calculateur PWM", "PWM 计算器", "PWM-Rechner"], "RC Time Constant": ["RC Zaman Sabiti", "الثابت الزمني RC", "Constante de temps RC", "RC 时间常数", "RC-Zeitkonstante"], "Calculate Resistor": ["Direnci Hesapla", "احسب المقاومة", "Calculer la résistance", "计算电阻", "Widerstand berechnen"], "Calculate Output": ["Çıkışı Hesapla", "احسب الخرج", "Calculer la sortie", "计算输出", "Ausgang berechnen"], "Convert ADC Value": ["ADC Değerini Dönüştür", "حوّل قيمة ADC", "Convertir la valeur ADC", "转换 ADC 数值", "ADC-Wert umrechnen"], "Calculate PWM": ["PWM Hesapla", "احسب PWM", "Calculer le PWM", "计算 PWM", "PWM berechnen"], "Calculate Time Constant": ["Zaman Sabitini Hesapla", "احسب الثابت الزمني", "Calculer la constante de temps", "计算时间常数", "Zeitkonstante berechnen"], "Engineering Toolkit · Built for learning and engineering projects": ["Engineering Toolkit · Öğrenme ve mühendislik projeleri için tasarlandı", "Engineering Toolkit · صُممت للتعلم والمشاريع الهندسية", "Engineering Toolkit · Conçu pour l’apprentissage et les projets d’ingénierie", "Engineering Toolkit · 为学习和工程项目而打造", "Engineering Toolkit · Für Lernen und Engineering-Projekte entwickelt"]};
+    const LANGUAGE_INDEX = { tr: 0, ar: 1, fr: 2, zh: 3, de: 4 };
+    Object.assign(I18N, {"Engineering / Electrical": ["Mühendislik / Elektrik", "الهندسة / الكهرباء", "Ingénierie / Électricité", "工程 / 电气", "Engineering / Elektrotechnik"], "Engineering / Electronics": ["Mühendislik / Elektronik", "الهندسة / الإلكترونيات", "Ingénierie / Électronique", "工程 / 电子学", "Engineering / Elektronik"], "Engineering / Data Analysis": ["Mühendislik / Veri Analizi", "الهندسة / تحليل البيانات", "Ingénierie / Analyse des données", "工程 / 数据分析", "Engineering / Datenanalyse"], "Electronics": ["Elektronik", "الإلكترونيات", "Électronique", "电子学", "Elektronik"], "Data Analysis": ["Veri Analizi", "تحليل البيانات", "Analyse des données", "数据分析", "Datenanalyse"], "Aviation Tools": ["Havacılık Araçları", "أدوات الطيران", "Outils aéronautiques", "航空工具", "Luftfahrt-Tools"], "Calculate voltage, current, resistance and power using basic electrical formulas.": ["Temel elektrik formülleriyle gerilim, akım, direnç ve gücü hesaplayın.", "احسب الجهد والتيار والمقاومة والقدرة باستخدام المعادلات الكهربائية الأساسية.", "Calculez tension, courant, résistance et puissance avec les formules électriques de base.", "使用基本电学公式计算电压、电流、电阻和功率。", "Berechnen Sie Spannung, Strom, Widerstand und Leistung mit grundlegenden elektrischen Formeln."], "Analyze measurement data and visualize it using graphs and statistical calculations.": ["Ölçüm verilerini grafikler ve istatistiksel hesaplamalarla analiz edin.", "حلّل بيانات القياس واعرضها باستخدام الرسوم البيانية والحسابات الإحصائية.", "Analysez les mesures et visualisez-les avec des graphiques et des calculs statistiques.", "使用图表和统计计算分析并可视化测量数据。", "Analysieren und visualisieren Sie Messdaten mit Diagrammen und statistischen Berechnungen."], "Enter measurement values to calculate statistics and generate a graph.": ["İstatistikleri hesaplamak ve grafik oluşturmak için ölçüm değerlerini girin.", "أدخل قيم القياس لحساب الإحصاءات وإنشاء رسم بياني.", "Saisissez les mesures pour calculer les statistiques et générer un graphique.", "输入测量值以计算统计数据并生成图表。", "Geben Sie Messwerte ein, um Statistiken zu berechnen und ein Diagramm zu erstellen."], "Separate values using commas. Example: 24, 25, 27, 26, 29": ["Değerleri virgülle ayırın. Örnek: 24, 25, 27, 26, 29", "افصل القيم بفواصل. مثال: 24، 25، 27، 26، 29", "Séparez les valeurs par des virgules. Exemple : 24, 25, 27, 26, 29", "用逗号分隔数值。例如：24, 25, 27, 26, 29", "Trennen Sie Werte durch Kommas. Beispiel: 24, 25, 27, 26, 29"], "You can customize each measurement name. These names will appear on the graph.": ["Her ölçümün adını özelleştirebilirsiniz. Bu adlar grafikte görünür.", "يمكنك تخصيص اسم كل قياس. ستظهر هذه الأسماء على الرسم البياني.", "Vous pouvez personnaliser le nom de chaque mesure. Ces noms apparaîtront sur le graphique.", "您可以自定义每个测量名称，这些名称将显示在图表上。", "Sie können jeden Messwert benennen. Diese Namen erscheinen im Diagramm."], "Explore basic aircraft performance and atmospheric calculations. Enter values in the units shown beside each field.": ["Temel uçak performansı ve atmosfer hesaplamalarını keşfedin. Değerleri alanların yanındaki birimlerle girin.", "استكشف حسابات أداء الطائرات والغلاف الجوي الأساسية. أدخل القيم بالوحدات الموضحة بجانب كل حقل.", "Explorez les calculs de base des performances aéronautiques et de l’atmosphère. Saisissez les valeurs dans les unités indiquées.", "探索基本飞机性能和大气计算。请使用输入框旁标明的单位。", "Entdecken Sie grundlegende Flugzeugleistungs- und Atmosphärenberechnungen. Geben Sie Werte in den angegebenen Einheiten ein."], "These simplified calculators are for learning and preliminary estimates. They are not substitutes for an aircraft flight manual, approved performance data, flight planning software, or instructions from a qualified flight instructor or aviation professional.": ["Bu basitleştirilmiş hesaplayıcılar öğrenme ve ön tahminler içindir. Uçak uçuş el kitabının, onaylı performans verilerinin, uçuş planlama yazılımının veya yetkin bir eğitmenin/uzmanın talimatlarının yerine geçmez.", "هذه الحاسبات المبسطة مخصصة للتعلم والتقديرات الأولية. ولا تحل محل دليل الطائرة أو بيانات الأداء المعتمدة أو برامج تخطيط الرحلات أو تعليمات مدرب طيران مؤهل أو مختص بالطيران.", "Ces calculateurs simplifiés servent à l’apprentissage et aux estimations préliminaires. Ils ne remplacent pas le manuel de vol, les données de performances approuvées, un logiciel de planification ou les consignes d’un instructeur qualifié.", "这些简化计算器仅用于学习和初步估算，不能替代飞机飞行手册、经批准的性能数据、飞行计划软件或合格飞行教员/航空专业人员的指导。", "Diese vereinfachten Rechner dienen Lernzwecken und ersten Schätzungen. Sie ersetzen weder Flughandbuch noch zugelassene Leistungsdaten, Flugplanungssoftware oder Anweisungen qualifizierter Fluglehrer bzw. Luftfahrtexperten."], "Calculate the aerodynamic lift generated by a wing using the lift equation.": ["Kanadın oluşturduğu aerodinamik kaldırma kuvvetini kaldırma denklemiyle hesaplayın.", "احسب قوة الرفع الديناميكية الهوائية التي يولدها الجناح باستخدام معادلة الرفع.", "Calculez la portance aérodynamique générée par une aile à l’aide de l’équation de portance.", "使用升力方程计算机翼产生的空气动力升力。", "Berechnen Sie den aerodynamischen Auftrieb eines Flügels mit der Auftriebsgleichung."], "Air Density (kg/m³)": ["Hava Yoğunluğu (kg/m³)", "كثافة الهواء (kg/m³)", "Densité de l’air (kg/m³)", "空气密度 (kg/m³)", "Luftdichte (kg/m³)"], "True Airspeed (m/s)": ["Gerçek Hava Hızı (m/s)", "السرعة الجوية الحقيقية (m/s)", "Vitesse vraie (m/s)", "真空速 (m/s)", "Wahre Fluggeschwindigkeit (m/s)"], "Wing Area (m²)": ["Kanat Alanı (m²)", "مساحة الجناح (m²)", "Surface alaire (m²)", "机翼面积 (m²)", "Flügelfläche (m²)"], "Lift Coefficient (CL)": ["Kaldırma Katsayısı (CL)", "معامل الرفع (CL)", "Coefficient de portance (CL)", "升力系数 (CL)", "Auftriebsbeiwert (CL)"], "Compare true airspeed with the local speed of sound. Temperature is entered in °C.": ["Gerçek hava hızını yerel ses hızıyla karşılaştırın. Sıcaklık °C cinsinden girilir.", "قارن السرعة الجوية الحقيقية بسرعة الصوت المحلية. تُدخل درجة الحرارة بالدرجة المئوية.", "Comparez la vitesse vraie à la vitesse locale du son. La température est saisie en °C.", "将真空速与当地音速进行比较。温度以 °C 输入。", "Vergleichen Sie die wahre Fluggeschwindigkeit mit der örtlichen Schallgeschwindigkeit. Temperatur in °C."], "Air Temperature (°C)": ["Hava Sıcaklığı (°C)", "درجة حرارة الهواء (°C)", "Température de l’air (°C)", "空气温度 (°C)", "Lufttemperatur (°C)"], "Estimate air density using the ideal gas law for dry air.": ["Kuru hava için ideal gaz yasasını kullanarak hava yoğunluğunu tahmin edin.", "قدّر كثافة الهواء باستخدام قانون الغاز المثالي للهواء الجاف.", "Estimez la densité de l’air à l’aide de la loi des gaz parfaits pour l’air sec.", "使用干空气理想气体定律估算空气密度。", "Schätzen Sie die Luftdichte mithilfe des idealen Gasgesetzes für trockene Luft."], "Estimate en-route time and fuel used from distance, groundspeed and fuel flow.": ["Mesafe, yer hızı ve yakıt akışından seyir süresini ve yakıt tüketimini tahmin edin.", "قدّر زمن الرحلة واستهلاك الوقود من المسافة والسرعة الأرضية ومعدل تدفق الوقود.", "Estimez le temps en route et le carburant consommé à partir de la distance, de la vitesse sol et du débit carburant.", "根据距离、地速和燃油流量估算航路时间和燃油消耗。", "Schätzen Sie Flugzeit und Kraftstoffverbrauch anhand von Strecke, Geschwindigkeit über Grund und Kraftstoffdurchfluss."], "Route Distance (km)": ["Rota Mesafesi (km)", "مسافة المسار (km)", "Distance de route (km)", "航线距离 (km)", "Streckenentfernung (km)"], "Groundspeed (km/h)": ["Yer Hızı (km/h)", "السرعة الأرضية (km/h)", "Vitesse sol (km/h)", "地速 (km/h)", "Geschwindigkeit über Grund (km/h)"], "Fuel Flow (L/h)": ["Yakıt Akışı (L/h)", "معدل تدفق الوقود (L/h)", "Débit carburant (L/h)", "燃油流量 (L/h)", "Kraftstoffdurchfluss (L/h)"], "Independent planning helpers for airliners and general aviation. Enter values from your simulator, aircraft, or flight plan.": ["Airliner ve genel havacılık için bağımsız planlama araçları. Simülatörünüzden, uçağınızdan veya uçuş planınızdan değerleri girin.", "أدوات تخطيط مستقلة للطائرات التجارية والطيران العام. أدخل القيم من المحاكي أو الطائرة أو خطة الرحلة.", "Outils de planification indépendants pour avions de ligne et aviation générale. Saisissez les valeurs de votre simulateur, avion ou plan de vol.", "为客机和通用航空提供独立规划工具。输入来自模拟器、飞机或飞行计划的数据。", "Unabhängige Planungshilfen für Verkehrsflugzeuge und die allgemeine Luftfahrt. Geben Sie Werte aus Simulator, Flugzeug oder Flugplan ein."], "Simulation-use note:": ["Simülasyon kullanım notu:", "ملاحظة للاستخدام في المحاكاة:", "Note d’utilisation en simulation :", "模拟使用说明：", "Hinweis zur Simulationsnutzung:"], "Route Distance (NM)": ["Rota Mesafesi (NM)", "مسافة المسار (NM)", "Distance de route (NM)", "航线距离 (NM)", "Streckenentfernung (NM)"], "Average Groundspeed (kt)": ["Ortalama Yer Hızı (kt)", "متوسط السرعة الأرضية (kt)", "Vitesse sol moyenne (kt)", "平均地速 (kt)", "Durchschnittliche Geschwindigkeit über Grund (kt)"], "Runway Heading (°)": ["Pist Doğrultusu (°)", "اتجاه المدرج (°)", "Cap de piste (°)", "跑道方向 (°)", "Pistenrichtung (°)"], "Wind Direction (° FROM)": ["Rüzgâr Yönü (° FROM)", "اتجاه الرياح (° FROM)", "Direction du vent (° FROM)", "风向 (° FROM)", "Windrichtung (° FROM)"], "Wind Speed (kt)": ["Rüzgâr Hızı (kt)", "سرعة الرياح (kt)", "Vitesse du vent (kt)", "风速 (kt)", "Windgeschwindigkeit (kt)"], "QNH (hPa)": ["QNH (hPa)", "QNH (hPa)", "QNH (hPa)", "QNH (hPa)", "QNH (hPa)"], "Field Elevation (ft)": ["Meydan Rakımı (ft)", "ارتفاع المطار (ft)", "Altitude de l’aérodrome (ft)", "机场标高 (ft)", "Flugplatzhöhe (ft)"], "Current Altitude (ft)": ["Mevcut İrtifa (ft)", "الارتفاع الحالي (ft)", "Altitude actuelle (ft)", "当前高度 (ft)", "Aktuelle Höhe (ft)"], "Target Altitude (ft)": ["Hedef İrtifa (ft)", "الارتفاع المستهدف (ft)", "Altitude cible (ft)", "目标高度 (ft)", "Zielhöhe (ft)"], "Groundspeed (kt)": ["Yer Hızı (kt)", "السرعة الأرضية (kt)", "Vitesse sol (kt)", "地速 (kt)", "Geschwindigkeit über Grund (kt)"], "Descent Angle (°)": ["Alçalma Açısı (°)", "زاوية الهبوط (°)", "Angle de descente (°)", "下降角 (°)", "Sinkflugwinkel (°)"], "Planned En-route Time (hours)": ["Planlanan Seyir Süresi (saat)", "زمن الرحلة المخطط (ساعات)", "Temps de route prévu (heures)", "计划航路时间（小时）", "Geplante Reisezeit (Stunden)"], "Cruise Fuel Flow (units/hour)": ["Seyir Yakıt Akışı (birim/saat)", "معدل تدفق الوقود أثناء التحليق (وحدة/ساعة)", "Débit carburant en croisière (unités/heure)", "巡航燃油流量（单位/小时）", "Kraftstoffdurchfluss im Reiseflug (Einheiten/Stunde)"], "Taxi / APU Fuel (units)": ["Taksi / APU Yakıtı (birim)", "وقود التاكسي / APU (وحدات)", "Carburant roulage / APU (unités)", "滑行 / APU 燃油（单位）", "Taxi- / APU-Kraftstoff (Einheiten)"], "Contingency (%)": ["Beklenmeyen Durum Payı (%)", "وقود احتياطي للطوارئ (%)", "Marge de contingence (%)", "应急余量 (%)", "Zuschlag für Unvorhergesehenes (%)"], "Final Reserve (minutes)": ["Son Rezerv (dakika)", "الاحتياطي النهائي (دقائق)", "Réserve finale (minutes)", "最终储备（分钟）", "Endreserve (Minuten)"], "Alternate Fuel (units)": ["Alternatif Meydan Yakıtı (birim)", "وقود المطار البديل (وحدات)", "Carburant de dégagement (unités)", "备降机场燃油（单位）", "Ausweichflugplatz-Kraftstoff (Einheiten)"], "Indicated Airspeed (kt)": ["Gösterge Hava Hızı (kt)", "السرعة الجوية المبينة (kt)", "Vitesse indiquée (kt)", "指示空速 (kt)", "Angezeigte Fluggeschwindigkeit (kt)"], "Pressure Altitude (ft)": ["Basınç İrtifası (ft)", "ارتفاع الضغط (ft)", "Altitude-pression (ft)", "气压高度 (ft)", "Druckhöhe (ft)"], "Outside Air Temperature (°C)": ["Dış Hava Sıcaklığı (°C)", "درجة حرارة الهواء الخارجي (°C)", "Température extérieure (°C)", "外界空气温度 (°C)", "Außenlufttemperatur (°C)"], "Supply / Output Voltage (V)": ["Besleme / Çıkış Gerilimi (V)", "جهد التغذية / الخرج (V)", "Tension d’alimentation / sortie (V)", "电源 / 输出电压 (V)", "Versorgungs- / Ausgangsspannung (V)"], "LED Forward Voltage (V)": ["LED İleri Gerilimi (V)", "جهد LED الأمامي (V)", "Tension directe de la LED (V)", "LED 正向电压 (V)", "LED-Durchlassspannung (V)"], "Desired LED Current (mA)": ["İstenen LED Akımı (mA)", "تيار LED المطلوب (mA)", "Courant LED souhaité (mA)", "所需 LED 电流 (mA)", "Gewünschter LED-Strom (mA)"], "Input Voltage (V)": ["Giriş Gerilimi (V)", "جهد الإدخال (V)", "Tension d’entrée (V)", "输入电压 (V)", "Eingangsspannung (V)"], "R1 (kΩ)": ["R1 (kΩ)", "R1 (kΩ)", "R1 (kΩ)", "R1 (kΩ)", "R1 (kΩ)"], "R2 (kΩ)": ["R2 (kΩ)", "R2 (kΩ)", "R2 (kΩ)", "R2 (kΩ)", "R2 (kΩ)"], "ADC Reference Voltage (V)": ["ADC Referans Gerilimi (V)", "جهد مرجع ADC (V)", "Tension de référence ADC (V)", "ADC 参考电压 (V)", "ADC-Referenzspannung (V)"], "ADC Resolution (bits)": ["ADC Çözünürlüğü (bit)", "دقة ADC (بت)", "Résolution ADC (bits)", "ADC 分辨率（位）", "ADC-Auflösung (Bit)"], "Duty Cycle (%)": ["Görev Döngüsü (%)", "دورة التشغيل (%)", "Rapport cyclique (%)", "占空比 (%)", "Tastgrad (%)"], "Logic Voltage (V)": ["Lojik Gerilimi (V)", "جهد المنطق (V)", "Tension logique (V)", "逻辑电压 (V)", "Logikspannung (V)"], "PWM Resolution (bits)": ["PWM Çözünürlüğü (bit)", "دقة PWM (بت)", "Résolution PWM (bits)", "PWM 分辨率（位）", "PWM-Auflösung (Bit)"], "Resistance (kΩ)": ["Direnç (kΩ)", "المقاومة (kΩ)", "Résistance (kΩ)", "电阻 (kΩ)", "Widerstand (kΩ)"], "Capacitance (µF)": ["Kapasitans (µF)", "السعة (µF)", "Capacité (µF)", "电容 (µF)", "Kapazität (µF)"], "Select your board": ["Kartınızı seçin", "اختر لوحتك", "Sélectionnez votre carte", "选择开发板", "Wählen Sie Ihr Board"], "Before wiring:": ["Bağlantı yapmadan önce:", "قبل التوصيل:", "Avant le câblage :", "接线前：", "Vor dem Verdrahten:"], "Version 2.0": ["Sürüm 2.1", "الإصدار 2.1", "Version 2.1", "版本 2.1", "Version 2.1"]});
+    const normalizeI18n = value => (value || "").replace(/\s+/g, " ").trim();
+    function setLanguage(language) {
+        const lang = LANGUAGE_INDEX[language] === undefined ? "en" : language;
+        const index = LANGUAGE_INDEX[lang];
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.body.dir = lang === "ar" ? "rtl" : "ltr";
+        document.body.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let node;
+        while ((node = walker.nextNode())) {
+            const original = normalizeI18n(node.nodeValue);
+            if (!original) continue;
+            let english = original;
+            if (lang === "en") {
+                for (const [key, values] of Object.entries(I18N)) {
+                    if (values.includes(original)) { english = key; break; }
+                }
+                if (english !== original) node.nodeValue = english;
+            } else if (I18N[original]) {
+                const translated = I18N[original][index];
+                if (translated) node.nodeValue = translated;
+            }
+        }
+        // Translate common input hints and keep technical units unchanged.
+        const placeholderTranslations = {
+            "e.g. 60": ["örn. 60", "مثال 60", "ex. 60", "例如 60", "z. B. 60"],
+            "e.g. 250": ["örn. 250", "مثال 250", "ex. 250", "例如 250", "z. B. 250"],
+            "e.g. 450": ["örn. 450", "مثال 450", "ex. 450", "例如 450", "z. B. 450"],
+            "e.g. 180": ["örn. 180", "مثال 180", "ex. 180", "例如 180", "z. B. 180"],
+            "e.g. 420": ["örn. 420", "مثال 420", "ex. 420", "例如 420", "z. B. 420"],
+            "e.g. 240": ["örn. 240", "مثال 240", "ex. 240", "例如 240", "z. B. 240"],
+            "e.g. 270": ["örn. 270", "مثال 270", "ex. 270", "例如 270", "z. B. 270"],
+            "e.g. 300": ["örn. 300", "مثال 300", "ex. 300", "例如 300", "z. B. 300"],
+            "e.g. 18": ["örn. 18", "مثال 18", "ex. 18", "例如 18", "z. B. 18"],
+            "e.g. 35000": ["örn. 35000", "مثال 35000", "ex. 35000", "例如 35000", "z. B. 35000"],
+            "e.g. 3000": ["örn. 3000", "مثال 3000", "ex. 3000", "例如 3000", "z. B. 3000"],
+            "e.g. 280": ["örn. 280", "مثال 280", "ex. 280", "例如 280", "z. B. 280"],
+            "e.g. 2.5": ["örn. 2.5", "مثال 2.5", "ex. 2.5", "例如 2.5", "z. B. 2,5"],
+            "e.g. 2400": ["örn. 2400", "مثال 2400", "ex. 2400", "例如 2400", "z. B. 2400"],
+            "e.g. 120": ["örn. 120", "مثال 120", "ex. 120", "例如 120", "z. B. 120"]
+        };
+        document.querySelectorAll("input[placeholder]").forEach(input => {
+            const current = input.getAttribute("placeholder");
+            if (lang === "en") {
+                const key = Object.keys(placeholderTranslations).find(k => placeholderTranslations[k].includes(current));
+                if (key) input.setAttribute("placeholder", key);
+            } else if (placeholderTranslations[current]) {
+                input.setAttribute("placeholder", placeholderTranslations[current][index]);
+            }
+        });
+        const selector = document.getElementById("languageSelect");
+        if (selector && selector.value !== lang) selector.value = lang;
+        try { localStorage.setItem("engineeringToolkitLanguage", lang); } catch (e) {}
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        let saved = "en";
+        try { saved = localStorage.getItem("engineeringToolkitLanguage") || "en"; } catch (e) {}
+        const selector = document.getElementById("languageSelect");
+        if (selector) selector.value = saved;
+        setLanguage(saved);
+    });
+
+</script>
+
+</body>
+</html>
